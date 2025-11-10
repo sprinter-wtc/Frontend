@@ -1,0 +1,110 @@
+.search-container {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 16px;
+  font-family: "Pretendard", sans-serif;
+  padding-bottom: 80px;
+}
+
+/* 상단 탭 */
+.search-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.search-tabs button {
+  flex: 1;
+  padding: 8px 0;
+  border: none;
+  border-radius: 10px;
+  background: #eee;
+  font-weight: 500;
+  cursor: pointer;
+}
+.search-tabs button.active {
+  background: #4f8ef7;
+  color: #fff;
+}
+
+/* AI 검색형 */
+.ai-search {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.ai-input {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.recommend-sentences span {
+  display: inline-block;
+  background: #f0f0f0;
+  padding: 6px 10px;
+  border-radius: 8px;
+  margin: 4px 4px 0 0;
+  font-size: 13px;
+}
+
+/* 선택형 */
+.select-search {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tag-section p {
+  margin: 0 0 8px 0;
+}
+.tag-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.tag {
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: #eee;
+  font-size: 13px;
+  cursor: pointer;
+}
+.tag.active {
+  background: #4f8ef7;
+  color: #fff;
+}
+
+.tag-select-area {
+  max-height: 250px; /* 태그 선택 영역 높이 제한 */
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+/* 필터 섹션 */
+.filter-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.filter-section label {
+  font-size: 13px;
+}
+
+/* 하단 네비게이션 */
+.bottom-nav {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-top: 1px solid #ddd;
+  padding: 10px 0;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+}
+.bottom-nav .active {
+  color: black;
+  font-weight: 600;
+}
