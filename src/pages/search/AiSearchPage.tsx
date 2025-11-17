@@ -198,7 +198,7 @@ const AiSearchPage: React.FC = () => {
         {aiGeneratedTags.length > 0 ? (
           aiGeneratedTags.map((tag) => <span key={tag}>{tag}</span>)
         ) : (
-          <p className="tag-placeholder">추천 태그가 여기에 표시됩니다.</p>
+          <p className="tag-placeholder">  &nbsp; </p>
         )}
       </div>
 
@@ -208,7 +208,7 @@ const AiSearchPage: React.FC = () => {
           {/* 추천 문장 */}
           <div className="suggest-section-recommend">
             <p className="suggest-section-recommend-title">
-              이런 문장은 어때요?
+              추천 문장
             </p>
             <div className="suggest-section-recommend-list">
               {RECOMMENDED_SENTENCES.map((s, i) => (
@@ -295,7 +295,8 @@ const AiSearchPage: React.FC = () => {
             </div>
           ))
         ) : (
-          <p>검색 결과가 없습니다.</p>
+          <p></p>
+          // <p>검색 결과가 없습니다.</p>
         )}
       </div>
       <BottomNav />
