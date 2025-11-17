@@ -1,23 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom"; // 페이지 이동용 훅
-import "../styles/Home.css"; // CSS 분리 파일
+import { useNavigate } from "react-router-dom";
+import "../styles/Home.css";
+import BottomNav from "../components/BottomNav";
 
-// 카페 데이터 타입 정의
+import { getRecommendedCafes, getCategories } from "../api/cafeApi";
+
+//카페 데이터 타입
 interface Cafe {
   id: number;
   name: string;
   location: string;
-  thumbnail: string;
+  thumbnail?: string;
   tags: string[];
 }
 
-// 카테고리 타입 정의
+//카테고리 타입
 interface Category {
   id: number;
   name: string;
+  imgUrl?: string;
 }
 
-// 카페 이용 목적 타입 정의
+//카페 이용 목적 타입
 interface Purpose {
   id: number;
   name: string;
@@ -25,15 +29,15 @@ interface Purpose {
 }
 
 const Home: React.FC = () => {
-  const navigate = useNavigate(); // 페이지 이동 훅
+  const navigate = useNavigate();
 
-  // ===============================
-  // 1️⃣ 더미 데이터 상태
-  // ===============================
+  // -------------------------------
+  //상태 정의
+  // -------------------------------
   const [categories, setCategories] = useState<Category[]>([
-    { id: 1, name: "스터디카페" },
-    { id: 2, name: "대형카페" },
-    { id: 3, name: "조용한 카페" },
+    { id: 1, name: "스터디카페", imgUrl: "https://placehold.co/80x80" },
+    { id: 2, name: "대형카페", imgUrl: "https://placehold.co/80x80" },
+    { id: 3, name: "조용한 카페", imgUrl: "https://placehold.co/80x80" },
   ]);
 
   const [purposes, setPurposes] = useState<Purpose[]>([
@@ -62,58 +66,53 @@ const Home: React.FC = () => {
     },
   ]);
 
-  // ===============================
-  // 2️⃣ 나중에 API 연결용 useEffect
-  // ===============================
+  // -------------------------------
+  // API 데이터 가져오기
+  // -------------------------------
   useEffect(() => {
-    // 예시: axios로 API 호출 가능
-    /*
-    axios
-      .get("http://121.168.23.135:8082/categories") // 카테고리 API
-      .then((res) => setCategories(res.data))
-      .catch((err) => console.error("카테고리 불러오기 실패:", err));
+    const fetchData = async () => {
+      try {
+        // 카테고리 + 추천 카페 동시 요청
+        const [catData, cafeData] = await Promise.all([
+          getCategories(),
+          getRecommendedCafes(),
+        ]);
 
-    axios
-      .get("http://121.168.23.135:8082/cafes/recommended") // 추천 카페 API
-      .then((res) => setRecommendedCafes(res.data))
-      .catch((err) => console.error("추천 카페 불러오기 실패:", err));
-    */
-  }, []); // 컴포넌트 처음 렌더링될 때만 실행
+        if (catData.length > 0) setCategories(catData);
+        if (cafeData.length > 0) setRecommendedCafes(cafeData);
+      } catch (err) {
+        console.error("홈 데이터 불러오기 실패:", err);
+      }
+    };
 
-  // ===============================
-  // 3️⃣ JSX 렌더링
-  // ===============================
+    fetchData();
+  }, []);
+
+  // -------------------------------
+  // JSX 렌더링
+  // -------------------------------
   return (
+    <div>
     <div className="home-container">
-      {/* --------------------------
-          검색창
-          클릭 시 Search 페이지로 이동
-      -------------------------- */}
-      <div
-        className="search-bar"
-        onClick={() => navigate("/search")} // 검색창 클릭 시 페이지 이동
-      >
-        <input type="text" placeholder="카페를 검색해보세요 ☕" readOnly />
-        <button className="search-btn">🔍</button>
+      {/* 검색창 */}
+      <div className="search-bar" onClick={() => navigate("ai-search")}>
+        <input type="text" placeholder="카페를 검색해보세요 ☕  🔍" readOnly />
       </div>
 
-      {/* --------------------------
-          공부 장소 추천 (가운데 정렬)
-      -------------------------- */}
-      <section className="category-section center">
+      {/* 공부 장소 추천 */}
+      <section className="category-section">
         <h2>공부 장소 추천</h2>
-        <div className="category-grid center">
+        <div className="category-grid">
           {categories.map((cat) => (
-            <button key={cat.id} className="category-item">
-              {cat.name}
-            </button>
+            <div key={cat.id} className="category-item">
+              <img src={cat.imgUrl} alt={cat.name} />
+              <span>{cat.name}</span>
+            </div>
           ))}
         </div>
       </section>
 
-      {/* --------------------------
-          카페 이용 목적 (정사각형 이미지 + 글씨)
-      -------------------------- */}
+      {/* 카페 이용 목적 */}
       <section className="purpose-section">
         <h2>카페 이용 목적</h2>
         <div className="purpose-grid">
@@ -126,21 +125,23 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* --------------------------
-          추천 카페 리스트
-      -------------------------- */}
+      {/* 추천 카페 리스트 */}
       <section className="recommend-section">
         <h2>추천 카페 리스트</h2>
         <div className="cafe-list">
           {recommendedCafes.map((cafe) => (
-            <div key={cafe.id} className="cafe-card">
+            <div
+              key={cafe.id}
+              className="cafe-card"
+              onClick={() => navigate(`/cafes/${cafe.id}`)}
+            >
               <img src={cafe.thumbnail} alt={cafe.name} />
               <div className="cafe-info">
                 <h3>{cafe.name}</h3>
                 <p>{cafe.location}</p>
                 <div className="tag-list">
                   {cafe.tags.map((tag, idx) => (
-                    <span key={idx} className="tag">
+                    <span key={idx} className="hometag">
                       {tag}
                     </span>
                   ))}
@@ -151,15 +152,11 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* --------------------------
-          하단 네비게이션
-      -------------------------- */}
-      <nav className="bottom-nav">
-        <div>타이머</div>
-        <div className="active">홈</div>
-        <div>검색</div>
-      </nav>
+    
     </div>
+      {/* 하단 네비게이션 */}
+      <BottomNav />
+      </div>
   );
 };
 
