@@ -1,8 +1,8 @@
+import "../../styles/search/TagSearchPage.css";
 import React, { useState, useEffect, KeyboardEvent } from "react";
 import BottomNav from "../../components/BottomNav";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "../../styles/search/TagSearchPage.css";
 import { getTags } from "../../api/cafeApi"; // 카테고리별 태그 API
 
 const TAG_MAP: { [key: string]: string[] } = {
@@ -156,15 +156,6 @@ const TagSearchPage: React.FC = () => {
 
       {!showResult ? (
         <>
-          <input
-            type="text"
-            placeholder="상호명 검색"
-            value={storeQuery}
-            onChange={(e) => setStoreQuery(e.target.value)}
-            onKeyDown={handleKeyDown}
-            className="ai-input w-full p-2 border rounded mb-2"
-          />
-
           <div className="selected-tags">
             {selectedTags.length === 0 ? (
               <p style={{ color: "#aaa" }}>태그를 선택해주세요</p>
@@ -180,56 +171,76 @@ const TagSearchPage: React.FC = () => {
               ))
             )}
           </div>
-
-          <div className="tag-options">
-            {Object.entries(tagsMap).map(([category, options]) => (
-              <div key={category} className="filter-section">
-                <label>{category}</label>
-                <div className="tag-grid">
-                  {options.map((opt) => (
-                    <button
-                      key={opt}
-                      type="button"
-                      className={tagClassName(opt)}
-                      onClick={() => toggleTag(opt)}
-                    >
-                      {opt}
-                    </button>
-                  ))}
+          <div>
+            <div>
+              <p>🌳 상호명 </p>
+              <input
+                type="text"
+                placeholder="상호명 검색"
+                value={storeQuery}
+                onChange={(e) => setStoreQuery(e.target.value)}
+                onKeyDown={handleKeyDown}
+                className="ai-input w-full p-2 border rounded mb-2"
+              />
+            </div>
+            <div className="tag-options">
+              {Object.entries(tagsMap).map(([category, options]) => (
+                <div key={category} className="filter-section">
+                  <label>{category}</label>
+                  <div className="tag-grid">
+                    {options.map((opt) => (
+                      <button
+                        key={opt}
+                        type="button"
+                        className={tagClassName(opt)}
+                        onClick={() => toggleTag(opt)}
+                      >
+                        {opt}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-
           <button type="button" className="ai-input" onClick={executeSearch}>
             검색
           </button>
         </>
       ) : (
         <>
-          <button type="button" onClick={() => setShowResult(false)}>
-            ← 다시 검색하기
-          </button>
-
-          <input
-            type="text"
-            value={storeQuery}
-            onChange={(e) => setStoreQuery(e.target.value)}
-            onKeyDown={handleKeyDown}
-            className="ai-input"
-          />
+          <div className="w-full text-left ">
+            <button type="button" onClick={() => setShowResult(false)}>
+              <span className="material-symbols-outlined">arrow_back_ios</span>{" "}
+            </button>
+          </div>
+          <div className="cafe-name-search-bar mb-2 ">
+            🌳 상호명
+            <input
+              type="text"
+              value={storeQuery}
+              onChange={(e) => setStoreQuery(e.target.value)}
+              onKeyDown={handleKeyDown}
+              className="ai-input"
+            />
+          </div>
 
           <div className="selected-tags">
-            {selectedTags.map((tag) => (
-              <span
-                key={tag}
-                className={tagClassName(tag)}
-                onClick={() => toggleTag(tag)}
-              >
-                {tag}
-              </span>
-            ))}
-
+            <div>
+              <span className="material-symbols-outlined">tag</span>태그를
+              선택해 주세요.
+            </div>
+            <div>
+              {selectedTags.map((tag) => (
+                <span
+                  key={tag}
+                  className={tagClassName(tag)}
+                  onClick={() => toggleTag(tag)}
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>{" "}
             <button
               type="button"
               onClick={() => setShowAddTags((s) => !s)}
@@ -268,11 +279,13 @@ const TagSearchPage: React.FC = () => {
                   className="cafe-card cursor-pointer"
                   onClick={() => navigate(`/cafe/${cafe.id}`)}
                 >
-                  <img
-                    src={cafe.imageList[0]?.imageUrl || ""}
-                    alt={cafe.name}
-                    className="cafe-thumbnail"
-                  />
+                  <div>
+                    <img
+                      src={cafe.imageList[0]?.imageUrl || ""}
+                      alt={cafe.name}
+                      className="cafe-thumbnail"
+                    />
+                  </div>
                   <div className="cafe-info">
                     <h3>{cafe.name}</h3>
                     <p className="cafe-rating">⭐ {cafe.rating || 0}</p>
