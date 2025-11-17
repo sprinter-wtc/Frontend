@@ -147,6 +147,18 @@
   font-weight: 500;
 }
 
+
+/* 이전에 작성한 문장 목록 */
+.suggest-section-last{
+  border: 1px solid red;
+}
+.suggest-section-last-list{
+  border: 1px solid blue;
+}
+.suggest-section-last-list div{
+  border: 1px solid green;
+}
+
 /* 반응형  */
 @media (max-width: 430px) {
   .search-tabs button {

@@ -18,6 +18,18 @@ interface Cafe {
   location: [number, number];
 }
 
+//-----------------------------
+// 검색 전 추천 문장 보여주기
+//-----------------------------
+
+const RECOMMENDED_SENTENCES = [
+  "조용하고 밝은 카페 추천해줘",
+  "공부 집중 잘 되는 곳 알려줘",
+  "커피 맛있는 카페 추천해줘",
+  "좌석 편한 카페 있을까?",
+  "대화하기 좋은 카페 알려줘",
+];
+
 // -----------------------------
 const MOCK_SERVER =
   "https://c765212b-1c21-4d14-98d9-56dd58cc5d3d.mock.pstmn.io";
@@ -34,6 +46,13 @@ const AiSearchPage: React.FC = () => {
   const [searchResults, setSearchResults] = useState<Cafe[] | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const [recentQueries, setRecentQueries] = useState<string[]>(() => {
+    return JSON.parse(localStorage.getItem("recentQueries") || "[]");
+  });
+
+  // -----------------
+  // 검색 전 추천 문장 보여주기
+  // -----------------
 
   // -----------------
   // 입력 디바운스 처리
@@ -70,6 +89,17 @@ const AiSearchPage: React.FC = () => {
   // -----------------
   // 검색 실행
   const executeSearch = async () => {
+    if (!aiQuery.trim()) return;
+
+    // 최근 검색어 업데이트 (한 번만)
+    setRecentQueries((prev: string[]) => {
+      // 이미 존재하면 추가 안함
+      if (prev.includes(aiQuery)) return prev;
+
+      const newList = [aiQuery, ...prev].slice(0, 5);
+      localStorage.setItem("recentQueries", JSON.stringify(newList));
+      return newList;
+    });
     setIsLoading(true);
     try {
       const listRes = await axios.get<{ data: { id: number }[] }>(
@@ -171,15 +201,57 @@ const AiSearchPage: React.FC = () => {
           <p className="tag-placeholder">추천 태그가 여기에 표시됩니다.</p>
         )}
       </div>
-      
+
       {/* 추천문장이랑 이전에 작성한 문장 작업하기   */}
+      {aiQuery.trim() === "" && (
+        <div className="ai-suggest-box">
+          {/* 추천 문장 */}
+          <div className="suggest-section-recommend">
+            <p className="suggest-section-recommend-title">
+              이런 문장은 어때요?
+            </p>
+            <div className="suggest-section-recommend-list">
+              {RECOMMENDED_SENTENCES.map((s, i) => (
+                <button
+                  key={i}
+                  className="suggest-section-recommend-item"
+                  onClick={() => setAiQuery(s)}
+                >
+                  {s}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* 최근 검색 */}
+          {recentQueries.length > 0 && (
+            <div className="suggest-section-last">
+              <p className="suggest-section-last-title">이전에 작성한 문장</p>
+              <div className="suggest-section-last-list">
+                <div>x</div>
+                <div>
+                  {recentQueries.map((q: string, i: number) => (
+                    <p
+                      key={i}
+                      className="suggest-section-last-item"
+                      onClick={() => setAiQuery(q)}
+                    >
+                      {q}
+                    </p>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* 검색 결과 */}
       <div className="results">
         {isLoading ? (
           <p>로딩 중...</p>
         ) : searchResults === null ? (
-          <p>검색어를 입력하고 검색해주세요.</p>
+          <p></p>
         ) : searchResults.length > 0 ? (
           searchResults.map((cafe) => (
             <div
