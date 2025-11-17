@@ -228,18 +228,32 @@ const AiSearchPage: React.FC = () => {
             <div className="suggest-section-last">
               <p className="suggest-section-last-title">이전에 작성한 문장</p>
               <div className="suggest-section-last-list">
-                <div>x</div>
-                <div>
-                  {recentQueries.map((q: string, i: number) => (
+                {recentQueries.map((q: string, i: number) => (
+                  <div key={i} className="suggest-section-last-item-wrapper">
+                     <button
+                      className="suggest-section-last-item-delete"
+                      onClick={() => {
+                        const newList = recentQueries.filter(
+                          (item) => item !== q
+                        );
+                        setRecentQueries(newList);
+                        localStorage.setItem(
+                          "recentQueries",
+                          JSON.stringify(newList)
+                        );
+                      }}
+                    >
+                      ✕ &nbsp;
+                    </button>
                     <p
-                      key={i}
                       className="suggest-section-last-item"
                       onClick={() => setAiQuery(q)}
                     >
                       {q}
                     </p>
-                  ))}
-                </div>
+                   
+                  </div>
+                ))}
               </div>
             </div>
           )}

@@ -155,8 +155,12 @@
 .suggest-section-last-list{
   border: 1px solid blue;
 }
-.suggest-section-last-list div{
+.suggest-section-last-item-wrapper{
   border: 1px solid green;
+  display: flex;
+}
+.suggest-section-last-item-wrapper button:hover{
+  color: #bbb;
 }
 
 /* 반응형  */
