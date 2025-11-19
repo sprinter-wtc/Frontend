@@ -4,6 +4,11 @@ import axios from "axios";
 import BottomNav from "../../components/BottomNav";
 import { useNavigate } from "react-router-dom";
 import { getAiTags } from "../../api/cafeApi"; // AI 태그 가져오기
+import CafeCard from "../../components/cafe/CafeCard";
+import {
+  normalizeCafe,
+  CafeCardData,
+} from "../../components/utils/normalizeCafe";
 
 // -----------------------------
 // 타입 정의
@@ -24,7 +29,6 @@ interface Cafe {
   address?: string;
   imageUrl?: string; // API 기본 이미지
 }
-
 
 //-----------------------------
 // 검색 전 추천 문장 보여주기
@@ -54,6 +58,10 @@ const AiSearchPage: React.FC = () => {
   const [searchResults, setSearchResults] = useState<Cafe[] | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const [results, setResults] = useState<Cafe[]>([]);
+  const normalizedResults: CafeCardData[] = (searchResults || []).map(
+    normalizeCafe
+  );
   const [recentQueries, setRecentQueries] = useState<string[]>(() => {
     return JSON.parse(localStorage.getItem("recentQueries") || "[]");
   });
@@ -124,7 +132,7 @@ const AiSearchPage: React.FC = () => {
       const filtered = cafes.filter((cafe) => {
         const tagMatch =
           aiGeneratedTags.length === 0 ||
-          aiGeneratedTags.every(
+          aiGeneratedTags.some(
             (tag) =>
               cafe.purpose.includes(tag) ||
               Object.values(cafe.tags).includes(tag) ||
@@ -206,7 +214,7 @@ const AiSearchPage: React.FC = () => {
         {aiGeneratedTags.length > 0 ? (
           aiGeneratedTags.map((tag) => <span key={tag}>{tag}</span>)
         ) : (
-          <p className="tag-placeholder">  &nbsp; </p>
+          <p className="tag-placeholder"> &nbsp; </p>
         )}
       </div>
 
@@ -215,9 +223,7 @@ const AiSearchPage: React.FC = () => {
         <div className="ai-suggest-box">
           {/* 추천 문장 */}
           <div className="suggest-section-recommend">
-            <p className="suggest-section-recommend-title">
-              추천 문장
-            </p>
+            <p className="suggest-section-recommend-title">추천 문장</p>
             <div className="suggest-section-recommend-list">
               {RECOMMENDED_SENTENCES.map((s, i) => (
                 <button
@@ -238,7 +244,7 @@ const AiSearchPage: React.FC = () => {
               <div className="suggest-section-last-list">
                 {recentQueries.map((q: string, i: number) => (
                   <div key={i} className="suggest-section-last-item-wrapper">
-                     <button
+                    <button
                       className="suggest-section-last-item-delete"
                       onClick={() => {
                         const newList = recentQueries.filter(
@@ -259,7 +265,6 @@ const AiSearchPage: React.FC = () => {
                     >
                       {q}
                     </p>
-                   
                   </div>
                 ))}
               </div>
@@ -269,7 +274,7 @@ const AiSearchPage: React.FC = () => {
       )}
 
       {/* 검색 결과 */}
-      <div className="results">
+      {/* <div className="results">
         {isLoading ? (
           <p>로딩 중...</p>
         ) : searchResults === null ? (
@@ -306,7 +311,22 @@ const AiSearchPage: React.FC = () => {
           <p></p>
           // <p>검색 결과가 없습니다.</p>
         )}
-      </div>
+      </div> */}
+      {aiQuery.trim() === "" ? (
+        <div className="ai-suggest-box"></div>
+      ) : (
+        <div className="results scroll-area">
+          {isLoading ? (
+            <p>로딩 중...</p>
+          ) : normalizedResults.length > 0 ? (
+            normalizedResults.map((cafe) => (
+              <CafeCard key={cafe.id} cafe={cafe} />
+            ))
+          ) : (
+            <p>검색 결과가 없습니다.</p>
+          )}
+        </div>
+      )}
       <BottomNav />
     </div>
   );

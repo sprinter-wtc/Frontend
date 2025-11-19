@@ -4,6 +4,11 @@ import BottomNav from "../../components/BottomNav";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { getTags } from "../../api/cafeApi"; // 카테고리별 태그 API
+import CafeCard from "../../components/cafe/CafeCard";
+import {
+  normalizeCafe,
+  CafeCardData,
+} from "../../components/utils/normalizeCafe";
 
 const TAG_MAP: { [key: string]: string[] } = {
   "☕️ 공간종류": ["카페", "스터디카페", "독서실"],
@@ -43,6 +48,7 @@ const TagSearchPage: React.FC = () => {
   const [showResult, setShowResult] = useState(false);
   const [results, setResults] = useState<Cafe[]>([]);
   const [showAddTags, setShowAddTags] = useState(false);
+  const normalizedResults: CafeCardData[] = results.map(normalizeCafe);
 
   const [tagsMap, setTagsMap] = useState<{ [key: string]: string[] }>(TAG_MAP);
 
@@ -301,79 +307,9 @@ const TagSearchPage: React.FC = () => {
           )}
 
           <div className="results scroll-area">
-            {results.length > 0 ? (
-              results.map((cafe) => (
-                <div
-                  key={cafe.id}
-                  className="cafe-card cursor-pointer"
-                  onClick={() => navigate(`/cafe/${cafe.id}`)}
-                >
-                  <div className="cafe-card-div">
-                    <div className="cafe-card-img">
-                      <img
-                        src={cafe.imageList[0]?.imageUrl || ""}
-                        alt={cafe.name}
-                        className="cafe-thumbnail"
-                      />
-                      {/* 이미지 불러오기 오류시 기본이미지보이게 */}
-                      {/* <img
-                        src={
-                          cafe.imageList[0]?.imageUrl ||
-                          "/images/default_cafe.png"
-                        }
-                        alt={cafe.name}
-                        className="cafe-thumbnail"
-                        onError={(e) => {
-                          e.currentTarget.src = "/images/default_cafe.png";
-                        }}
-                      /> */}
-                    </div>
-                    <div className="cafe-info">
-                      <div className="cafe-info-title">
-                        <h3>{cafe.name}</h3>
-                        <p className="cafe-rating">
-                          {" "}
-                          &nbsp; ⭐ {cafe.rating || 0}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="cafe-meta">
-                          📍 {cafe.location.join(", ")}
-                        </p>
-                      </div>
-                      <div
-                        className={`open-status-badge ${checkOpenStatus(
-                          cafe.startingTime,
-                          cafe.closingTime
-                        )}`}
-                      >
-                        {checkOpenStatus(
-                          cafe.startingTime,
-                          cafe.closingTime
-                        ) === "OPEN"
-                          ? "영업중"
-                          : checkOpenStatus(
-                              cafe.startingTime,
-                              cafe.closingTime
-                            ) === "CLOSED"
-                          ? "영업종료"
-                          : "영업시간 정보없음"}
-                      </div>
-
-                      <div className="cafe-card-tag-list">
-                        {cafe.purpose.map((t: string) => (
-                          <span key={t} className="cafe-card-tag">
-                            {t}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <p>검색 결과가 없습니다.</p>
-            )}
+            {normalizedResults.map((cafe) => (
+              <CafeCard key={cafe.id} cafe={cafe} />
+            ))}
           </div>
         </>
       )}
