@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import "../styles/Search.css";
 import { searchCafes } from "../api/cafeApi";
+import { useNavigate } from "react-router-dom";
 
 const TAG_KEYWORDS: { [tag: string]: string[] } = {
   카페: ["카페", "커피", "디저트", "케이크", "쿠키", "노트북"],
@@ -166,11 +167,11 @@ const Search: React.FC<SearchProps> = ({ onSearch }) => {
 
       const results = await searchCafes(storeQuery, tags);
 
-      setSearchResults(results);
-      if (onSearch) onSearch(storeQuery, tags);
-    } catch (err) {
-      console.error("검색 오류:", err);
-    }
+     //  검색 결과 페이지로 이동
+    navigate("/search-result", { state: { mode, query: aiQuery, tags, results } });
+  } catch (err) {
+    console.error("검색 오류:", err);
+  }
   };
 
   const handleKeyPress = (
@@ -186,6 +187,8 @@ const Search: React.FC<SearchProps> = ({ onSearch }) => {
     const spaceTags = TAG_MAP["☕️ 공간종류"];
     return spaceTags.includes(tag) ? "#C6EAC3" : "#E58C8C";
   };
+const navigate = useNavigate();
+
 
   return (
     <div className="search-container pb-[80px]">

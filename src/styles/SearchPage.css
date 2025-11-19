@@ -1,0 +1,31 @@
+.search-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding: 1rem;
+  box-sizing: border-box;
+  overflow-y: auto;
+  background-color: #ffffff;
+  padding-bottom: 100px;
+}
+
+/* 상단 탭 */
+.search-tabs {
+  display: flex;
+  justify-content: space-around;
+}
+
+.search-tabs div {
+  flex: 1;
+  padding: 0.8rem;
+  cursor: pointer;
+  text-align: center;
+  border-radius: 10px;
+  transition: 0.2s;
+  font-weight: 500;
+}
+
+.search-tabs div.active {
+  border-bottom: 2px solid black;
+  font-weight: bold;
+}

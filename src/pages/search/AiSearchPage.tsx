@@ -15,8 +15,16 @@ interface Cafe {
   purpose: string[];
   tags: { [key: string]: any };
   imageList: { imageUrl: string; index: number }[];
-  location: [number, number];
+  location: number[];
+  rating?: number;
+  startingTime?: string;
+  closingTime?: string;
+  isWork?: boolean;
+  averageStarRating?: number;
+  address?: string;
+  imageUrl?: string; // API 기본 이미지
 }
+
 
 //-----------------------------
 // 검색 전 추천 문장 보여주기
