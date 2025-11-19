@@ -4,7 +4,7 @@ import "../styles/Home.css";
 import BottomNav from "../components/BottomNav";
 import { CafeBase } from "./cafe/cafecard/CafeBase";
 import { getRecommendedCafes, getCategories } from "../api/cafeApi";
-import CafeCard from "./cafe/cafecard/CafeCard";
+// import CafeCard from "./cafe/cafecard/CafeCard";
 //카페 데이터 타입
 interface Cafe {
   id: number;

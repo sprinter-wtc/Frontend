@@ -3,6 +3,9 @@
   margin: 0 auto;
   padding: 16px;
   font-family: "Pretendard", sans-serif;
+    padding-bottom: 80px; /* 하단바 높이만큼 여유 */
+   overflow-y: auto;
+
 }
 
 /* 검색창 */
