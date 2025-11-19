@@ -110,29 +110,30 @@
   flex-direction: column;
   gap: 12px;
 }
-.cafe-card {
+/* .cafe-card {
   display: flex;
   background: #fff;
   border-radius: 12px;
   padding: 10px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
   transition: all 0.2s;
-}
-.cafe-card img {
+} */
+/* .cafe-card img {
   width: 70px;
   height: 70px;
   border-radius: 8px;
   margin-right: 10px;
-}
-.cafe-info h3 {
+  border: 1px solid red;
+} */
+/* .cafe-info h3 {
   margin: 0;
   font-size: 16px;
-}
-.cafe-info p {
+} */
+/* .cafe-info p {
   margin: 2px 0;
   font-size: 13px;
   color: #666;
-}
+} */
 .tag-list {
   margin-top: 4px;
 }
