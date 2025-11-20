@@ -1,0 +1,103 @@
+.studyspotrec-container {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 16px;
+  padding-bottom: 80px; /* 하단바 영역만큼 */
+  font-family: "Pretendard", sans-serif;
+  overflow-y: auto;
+}
+
+/* 헤더 */
+.header-back {
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+/* 상단 선택창  */
+.studyspotrec-filter{
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+
+/* 태그 필터*/
+.filter-tags-container {
+  margin: 20px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.filter-tag {
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: #f6f6f6;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.filter-tag.active {
+  background: black;
+  color: white;
+}
+
+
+/*  추천 카페 리스트 */
+.recommend-section {
+  margin-top: 10vh;
+  margin-bottom: 60px;
+}
+
+.cafe-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* 태그 리스트 (카페 카드 내부) */
+.tag-list {
+  margin-top: 4px;
+}
+
+.hometag {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 8px;
+  font-size: 12px;
+  margin-right: 4px;
+  background: #eee;
+}
+
+/* 하단 네비게이션 */
+.bottom-nav {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px 0;
+  background: #fff;
+  border-top: 1px solid #ddd;
+
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.bottom-nav .active {
+  color: black;
+  font-weight: 600;
+}
+
+/*   반응형 */
+@media (max-width: 420px) {
+  .filter-tag {
+    font-size: 13px;
+    padding: 5px 10px;
+  }
+}
