@@ -83,59 +83,66 @@ const StudySpotRec: React.FC = () => {
   return (
     <div>
       <div className="studyspotrec-container">
-        {/* 뒤로가기 */}
-        <div className="header-back">
-          <button type="button" onClick={() => navigate(-1)}>
-            <span className="material-symbols-outlined">arrow_back_ios</span>
-          </button>
-          <div className="header-back-title">&nbsp; 장소추천</div>
-        </div>
-        <div className="studyspotrec-filters">
-          {/* 공부 장소 추천 */}
-          <section>
-            <div className="tag-grid">
-              {defaultTags.map((tag) => (
-                <div key={tag.id} className="tag-item">
-                  <img src={tag.imgUrl} alt={tag.name} />
-                  <span>{tag.name}</span>
-                </div>
-              ))}
-
-              {showMore &&
-                hiddenTags.map((tag) => (
+        <div className="studyspotrec-top-section">
+          {/* 뒤로가기 */}
+          <div className="header-back">
+            <button type="button" onClick={() => navigate(-1)}>
+              <span className="material-symbols-outlined">arrow_back_ios</span>
+            </button>
+            <div className="header-back-title">&nbsp; 장소추천</div>
+          </div>
+          <div className="studyspotrec-top-select">
+            {/* 공부 장소 추천 */}
+            <section>
+              <div className="tag-row">
+                {defaultTags.map((tag) => (
                   <div key={tag.id} className="tag-item">
                     <img src={tag.imgUrl} alt={tag.name} />
                     <span>{tag.name}</span>
                   </div>
                 ))}
-            </div>
 
-            {/* 더보기 / 접기 버튼 */}
-            {hiddenTags.length > 0 && (
-              <button
-                className="dropdown-btn"
-                onClick={() => setShowMore(!showMore)}
-              >
-                {showMore ? "접기 ▲" : "더보기 ▼"}
-              </button>
-            )}
+                {/* 더보기 버튼을 마지막 태그 옆에 */}
+                {hiddenTags.length > 0 && (
+                  <button
+                    className="dropdown-btn"
+                    onClick={() => setShowMore(!showMore)}
+                  >
+                    {showMore ? "▲" : "▼"}
+                  </button>
+                )}
+
+                {/* 펼쳐진 숨겨진 태그들 */}
+                {showMore &&
+                  hiddenTags.map((tag) => (
+                    <div key={tag.id} className="tag-item hidden-inline">
+                      <img src={tag.imgUrl} alt={tag.name} />
+                      <span>{tag.name}</span>
+                    </div>
+                  ))}
+              </div>
+
+             
+            </section>
+          </div>
+        </div>
+        <hr></hr>
+       
+        {/*     추천 카페 리스트       */}
+        <div className="recommend-section">
+          <section>
+            <h2>추천 카페 리스트</h2>
+            <div className="cafe-list">
+              {recommendedCafes.length > 0 ? (
+                recommendedCafes.map((cafe) => (
+                  <CafeCard key={cafe.id} cafe={cafe} />
+                ))
+              ) : (
+                <p>추천 카페가 없습니다.</p>
+              )}
+            </div>
           </section>
         </div>
-        {/* ------------------------- */}
-        {/*     추천 카페 리스트       */}
-        {/* ------------------------- */}
-        <section className="recommend-section">
-          <h2>추천 카페 리스트</h2>
-          <div className="cafe-list">
-            {recommendedCafes.length > 0 ? (
-              recommendedCafes.map((cafe) => (
-                <CafeCard key={cafe.id} cafe={cafe} />
-              ))
-            ) : (
-              <p>추천 카페가 없습니다.</p>
-            )}
-          </div>
-        </section>
       </div>
 
       <BottomNav />

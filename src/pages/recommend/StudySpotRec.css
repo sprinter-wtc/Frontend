@@ -17,14 +17,26 @@
   cursor: pointer;
 }
 /* 상단 선택창  */
-.studyspotrec-filter{
+/* .studyspotrec-filter {
   display: flex;
   justify-content: center;
   gap: 10px;
   margin-bottom: 20px;
+  width: 100%;
+} */
+
+.studyspotrec-top-section{
+  /* border: solid 1px green; */
+  /* float: left; */
+  
+}
+.studyspotrec-top-section div{
+  border: solid 1px red;
 }
 
-
+.studyspotrec-top-select{
+  float: left;
+}
 /* 태그 필터*/
 .filter-tags-container {
   margin: 20px 0;
@@ -46,7 +58,40 @@
   background: black;
   color: white;
 }
+/* 상단 태그 줄 */
+.tag-row {
+  display: flex;
+  flex-wrap: wrap; /* 화면 좁으면 줄 바꿈 가능 */
+  align-items: center; /* 버튼과 태그 세로 정렬 */
+  gap: 8px;
+}
 
+.tag-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 14px;
+}
+
+.dropdown-btn {
+  border: none;
+  background: transparent;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.hidden-inline {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+/* 펼쳐지는 태그들 */
+.hidden-tags {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
 
 /*  추천 카페 리스트 */
 .recommend-section {
@@ -61,38 +106,12 @@
 }
 
 /* 태그 리스트 (카페 카드 내부) */
-.tag-list {
-  margin-top: 4px;
-}
 
-.hometag {
-  display: inline-block;
-  padding: 2px 6px;
-  border-radius: 8px;
-  font-size: 12px;
-  margin-right: 4px;
-  background: #eee;
-}
+
+
 
 /* 하단 네비게이션 */
-.bottom-nav {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: 10px 0;
-  background: #fff;
-  border-top: 1px solid #ddd;
 
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-}
-
-.bottom-nav .active {
-  color: black;
-  font-weight: 600;
-}
 
 /*   반응형 */
 @media (max-width: 420px) {
