@@ -1,22 +1,22 @@
-# --------------------------
-# 1) Build Stage
-# --------------------------
+# 1단계: React 앱 빌드
 FROM node:20-alpine AS builder
-WORKDIR /app
 
+WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm install
+
+# lock 파일 불일치 문제 우회
+RUN npm install --legacy-peer-deps
 
 COPY . .
 RUN npm run build
 
-# --------------------------
-# 2) Production Stage (Nginx)
-# --------------------------
+# 2단계: Nginx로 정적 파일 제공
 FROM nginx:alpine
+
+# React 빌드 결과물을 복사
 COPY --from=builder /app/build /usr/share/nginx/html
 
-# React Router 대응용 설정
+# SPA 라우팅 지원
 RUN echo 'server { \
     listen 80; \
     server_name localhost; \
