@@ -3,6 +3,7 @@ import AiSearchPage from "./pages/search/AiSearchPage";
 import TagSearchPage from "./pages/search/TagSearchPage";
 import Home from "./pages/Home"; // 홈 페이지
 import CafeDetailPage from "./pages/cafe/CafeDetailPage";
+import StudySpotRec from "./pages/recommend/StudySpotRec";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/tag-search" element={<TagSearchPage />} />
         {/* <Route path="/cafe-detail" element={<CafeDetail/>}/> */}
         <Route path="/cafe/:id" element={<CafeDetailPage />} />
+        <Route path="studyspot-rec" element={<StudySpotRec/>} />
 
       </Routes>
     </Router>
