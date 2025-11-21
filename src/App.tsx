@@ -1,23 +1,24 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import AiSearchPage from "./pages/search/AiSearchPage";
-import TagSearchPage from "./pages/search/TagSearchPage";
-import Home from "./pages/Home"; // 홈 페이지
-import CafeDetailPage from "./pages/cafe/CafeDetailPage";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import Home from "./pages/Home";
+import About from "./pages/About";
 
 function App() {
   return (
-    <Router>
+    <BrowserRouter>
+      <nav className="p-4 bg-gray-200 flex gap-4">
+        <Link to="/" className="text-blue-600 font-semibold">
+          홈
+        </Link>
+        <Link to="/about" className="text-green-600 font-semibold">
+          소개
+        </Link>
+      </nav>
+
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/ai-search" element={<AiSearchPage />} />
-        <Route path="/search-select" element={<TagSearchPage />} />
-        <Route path="/ai-search" element={<AiSearchPage />} />
-        <Route path="/tag-search" element={<TagSearchPage />} />
-        {/* <Route path="/cafe-detail" element={<CafeDetail/>}/> */}
-        <Route path="/cafe/:id" element={<CafeDetailPage />} />
-
+        <Route path="/about" element={<About />} />
       </Routes>
-    </Router>
+    </BrowserRouter>
   );
 }
 
