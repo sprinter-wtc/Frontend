@@ -1,0 +1,60 @@
+{
+  
+  "tags": [
+    { "id": 1, "category": "☕️ 공간종류", "items": ["카페", "스터디카페", "독서실"] },
+    { "id": 2, "category": "💡 조명 밝기", "items": ["어두움", "중간", "밝음"] },
+    { "id": 3, "category": "👂 소음정도", "items": ["조용함", "적당한소음", "시끌벅적"] }
+  ],
+
+
+  "cafes": [
+    {
+      "id": 1,
+      "name": "카페 블루보틀",
+      "location": "서울 강남",
+      "tags": ["카페", "밝음", "조용함"],
+      "thumbnail": "https://via.placeholder.com/80",
+      "rating": 4.7,
+      "hours": "09:00~22:00"
+    },
+    {
+      "id": 2,
+      "name": "카페 루시드",
+      "location": "서울 홍대",
+      "tags": ["독서실", "밝음", "시간제한 없음"],
+      "thumbnail": "https://via.placeholder.com/80",
+      "rating": 4.5,
+      "hours": "08:00~23:00"
+    },
+    {
+	
+				"id" : 3,
+				"name" : "성수동 스타벅스",
+				"averageStarRating" : 4.5,
+				"isWork" : true,
+				"startingTime" : "10:00",
+				"closingTime" : "22:00",
+				"category" : "카페",
+				"tags" : ["콘센트", "애견동반"],
+				"imageUrl": "https:...",
+				"address" : "서울 마포구 신수동" 
+        
+		}
+
+  ],
+  "categories": [
+    { "id": 1, "name": "카페" },
+    { "id": 2, "name": "스터디카페" },
+    { "id": 3, "name": "독서실" }
+  ],
+  "reviews": [
+    {
+      "id": 1,
+      "cafeId": 1,
+      "rating": 5,
+      "comment": "좋아요!",
+      "author": "홍길동",
+      "createdAt": "2025-11-13T10:00:00Z"
+    }
+  ]
+}
