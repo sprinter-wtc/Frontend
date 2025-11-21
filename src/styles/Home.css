@@ -1,0 +1,175 @@
+.home-container {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 16px;
+  font-family: "Pretendard", sans-serif;
+    padding-bottom: 80px; /* 하단바 높이만큼 여유 */
+   overflow-y: auto;
+
+}
+
+/* 검색창 */
+.search-bar {
+  border: 1px red solid;
+  display: flex;
+  align-items: center;
+  background: #ddd;
+  border-radius: 20px;
+  padding: 8px 12px;
+  max-width: 420px;
+}
+.search-bar:hover{
+  cursor :grab;
+}
+
+.search-bar input {
+    border: 1px orange solid;
+
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 16px;
+}
+.search-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+/* 공부 장소 추천 */
+.category-section {
+  margin-top:  10vh;
+  margin-bottom: 10vh;
+}
+.category-section.center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.category-grid {
+ display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 10px;
+}
+.category-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #fff;
+  border-radius: 10px;
+  padding: 8px;
+  transition: all 0.2s;
+}
+.category-item img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  margin-bottom: 6px;
+  border-radius: 8px;
+}
+
+/* 카페 이용 목적 */
+.purpose-section {
+  margin-bottom: 24px;
+}
+.purpose-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 10px;
+}
+.purpose-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #fff;
+  border-radius: 10px;
+  padding: 8px;
+  transition: all 0.2s;
+}
+.purpose-item img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  margin-bottom: 6px;
+  border-radius: 8px;
+}
+.purpose-item span {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* 추천 카페 리스트 */
+.recommend-section {
+  margin-top: 10vh;
+  margin-bottom: 60px;
+}
+.cafe-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+/* .cafe-card {
+  display: flex;
+  background: #fff;
+  border-radius: 12px;
+  padding: 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  transition: all 0.2s;
+} */
+/* .cafe-card img {
+  width: 70px;
+  height: 70px;
+  border-radius: 8px;
+  margin-right: 10px;
+  border: 1px solid red;
+} */
+/* .cafe-info h3 {
+  margin: 0;
+  font-size: 16px;
+} */
+/* .cafe-info p {
+  margin: 2px 0;
+  font-size: 13px;
+  color: #666;
+} */
+.tag-list {
+  margin-top: 4px;
+}
+.hometag {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 8px;
+  font-size: 12px;
+  margin-right: 4px;
+  background: #eee;
+}
+
+/* 하단 네비게이션 */
+.bottom-nav {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-top: 1px solid #ddd;
+  padding: 10px 0;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+}
+.bottom-nav .active {
+  color: black;
+  font-weight: 600;
+}
+
+/* 반응형 */
+@media (max-width: 420px) {
+  .purpose-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .category-grid {
+    gap: 6px;
+  }
+}

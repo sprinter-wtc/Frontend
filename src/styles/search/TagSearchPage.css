@@ -1,0 +1,207 @@
+/* 전체 컨테이너 */
+.search-container {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 16px;
+  padding-bottom: 100px;
+  font-family: "Pretendard", sans-serif;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* 상단 탭 */
+.search-tabs {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 16px;
+  border-bottom: 1.5px solid #ddd;
+}
+
+.search-tabs button {
+  flex: 1;
+  padding: 10px 0;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #666;
+}
+
+.search-tabs button.active {
+  border-bottom: 3px solid #ffcc66;
+  color: #333;
+}
+
+/* 선택된 태그 영역 */
+.selected-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+  align-items: left;
+}
+.selected-tags div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
+}
+
+.selected-tags .tag {
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-right: 10px;
+}
+
+/* + 버튼 */
+.plus-btn {
+  padding: 0 12px;
+  margin-left: 90%;
+  font-size: 18px;
+  border-radius: 10px;
+  border: none;
+  background-color: #ddd;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: right;
+}
+
+.plus-btn:hover {
+  background-color: #ffb84d;
+}
+
+/* 공통 태그 스타일 */
+.tag {
+  padding: 8px 20px;
+  border-radius: 15px;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background-color: #ddd;
+  color: #333;
+}
+
+/* 선택된 태그 색상 */
+.tag.space-type.active {
+  background-color: #c6eac3;
+}
+
+.tag.active:not(.space-type) {
+  background-color: #e58c8c;
+  color: #fff;
+}
+
+/* hover 효과 */
+.tag:hover {
+  transform: scale(1.05);
+  background-color: #bbb;
+}
+
+/* 공간 종류 hover */
+.tag.space-type:hover {
+  background-color: #a9d6a3;
+}
+
+/* 일반 태그 hover */
+.tag:not(.space-type):hover {
+  background-color: #d47b7b;
+}
+
+/* 태그 옵션 영역 */
+.tag-options {
+  overflow-y: auto;
+  max-height: 55vh;
+  padding: 8px;
+  font-weight: 600;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  margin-bottom: 12px;
+}
+
+.tag-options .filter-section {
+  margin-bottom: 16px;
+}
+
+.tag-options .filter-section label {
+  font-weight: 500;
+  display: block;
+  margin-bottom: 6px;
+  color: #444;
+}
+
+.tag-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* 태그 추가창 */
+.tag-selector {
+  background-color: #fff8e1;
+  border-radius: 12px;
+  padding: 12px;
+  margin: 12px 0;
+}
+
+.tag-selector .tag-group {
+  margin-bottom: 12px;
+}
+
+.tag-selector .tag-group h4 {
+  font-size: 14px;
+  margin-bottom: 6px;
+  color: #333;
+}
+
+.tag-selector .tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* 검색 버튼 */
+button.ai-input {
+  width: 100%;
+  background-color: #ffcc66;
+  color: #333;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  padding: 12px;
+  cursor: pointer;
+  margin-top: 12px;
+  transition: background 0.2s;
+}
+
+button.ai-input:hover {
+  background-color: #ffb84d;
+}
+
+/* 검색 결과 카드 */
+.results {
+  margin-top: 12px;
+  border: 1px solid red;
+}
+/* 
+.cafe-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 12px;
+  background-color: #fff;
+  transition: all 0.2s;
+} */
+
+
+/* 
+.cafe-name-search-bar input {
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background-color: #ddd;
+} */

@@ -1,0 +1,203 @@
+/* CafeDetail.css */
+
+.cafe-detail-page {
+ max-width: 420px;
+   margin: 0 auto;
+  padding: 16px;
+  font-family: "Noto Sans KR", sans-serif;
+  padding-bottom: 100px;
+}
+
+/* 뒤로가기 버튼 */
+.back-btn {
+  display: inline-block;
+  margin-bottom: 12px;
+  padding: 6px 12px;
+  background-color: #f0f0f0;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* 이미지 슬라이더 */
+.slider {
+  position: relative;
+  width: 100%;
+  height: 250px;
+  margin-bottom: 16px;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.slider-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.slider-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0,0,0,0.4);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.slider-btn.left {
+  left: 8px;
+}
+
+.slider-btn.right {
+  right: 8px;
+}
+
+/* 카페 제목 & 카테고리 */
+.cafe-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.category {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 12px;
+}
+
+/* 목적 태그 */
+.tag-section {
+  margin-bottom: 16px;
+}
+
+.tag-blue {
+  display: inline-block;
+  background-color: #d0ebff;
+  color: #1c7ed6;
+  padding: 4px 8px;
+  margin: 2px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+/* 섹션 제목 */
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 20px 0 8px;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 4px;
+}
+
+/* 카페 정보 */
+.info-list {
+  list-style: none;
+  padding-left: 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.info-list li {
+  margin-bottom: 4px;
+}
+
+/* 메뉴 그리드 */
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+}
+
+.menu-card {
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 8px;
+  text-align: center;
+  background-color: #fff;
+}
+
+.menu-img {
+  width: 100%;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-bottom: 6px;
+}
+
+.menu-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.menu-desc {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.menu-price {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+/* 평가 & 리뷰 */
+.reviews-section {
+  margin-top: 2rem;
+}
+
+.rating-section {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.avg-rating {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+/* 별점 */
+.stars {
+  color: #ccc;
+  margin-left: 0.5rem;
+  font-size: 1.25rem;
+}
+
+.stars .filled {
+  color: #f5c518;
+}
+
+.review-count {
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.review-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.review-card {
+  border: 1px solid #eee;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  background-color: #fafafa;
+}
+
+/* 네이버 지도 */
+.naver-map {
+  width: 100%;
+  height: 250px;
+  border-radius: 12px;
+  margin-top: 12px;
+}

@@ -1,0 +1,62 @@
+.bottom-nav {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-top: 1px solid #ddd;
+  padding: 12px 0;
+  position: fixed; 
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  max-width: 420px;
+  margin: 0 auto;
+  font-family: "Pretendard", sans-serif;
+  box-sizing: border-box;
+}
+
+/* 아이폰 기준 보기 좋게 폰트크기와 터치 영역 조정 */
+.bottom-nav div {
+  flex: 1;
+  text-align: center;
+  font-size: 0.95rem;
+  padding: 8px 0;
+  transition: color 0.2s ease;
+  
+}
+
+.bottom-nav div.active {
+  color: black;
+  font-weight: 600;
+   display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  
+}
+
+/* 모바일 반응형 (아이폰 16 기준) */
+@media (max-width: 430px) {
+  .bottom-nav {
+    padding: 10px 0;
+  }
+  .bottom-nav div {
+    font-size: 0.85rem;
+    padding: 7px 0;
+  }
+}
+
+
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 1,
+  'wght' 100,
+  'GRAD' -25,
+  'opsz' 24
+}
