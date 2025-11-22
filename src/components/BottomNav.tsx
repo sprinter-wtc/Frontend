@@ -1,6 +1,9 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./BottomNav.css";
+import HomeIcon from "@mui/icons-material/Home";
+import AlarmIcon from "@mui/icons-material/Alarm";
+import SearchIcon from "@mui/icons-material/Search";
 
 const BottomNav: React.FC = () => {
   const navigate = useNavigate();
@@ -12,15 +15,14 @@ const BottomNav: React.FC = () => {
         className={location.pathname === "/timer" ? "active" : "cursor-pointer"}
         onClick={() => navigate("/timer")}
       >
-        <span className="material-symbols-outlined">alarm</span>
+        <AlarmIcon />
         타이머
       </div>
       <div
         className={location.pathname === "/" ? "active" : "cursor-pointer"}
         onClick={() => navigate("/")}
       >
-        <span className="material-symbols-outlined">home</span>    
-        홈
+        <HomeIcon />홈
       </div>
       <div
         className={
@@ -28,7 +30,7 @@ const BottomNav: React.FC = () => {
         }
         onClick={() => navigate("/search")}
       >
-        <span className="material-symbols-outlined">search</span>
+        <SearchIcon />
         검색
       </div>
     </div>
