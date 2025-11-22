@@ -105,14 +105,14 @@ const TagSearchPage: React.FC = () => {
       const listRes = await axios.get<{
         data: { id: number }[];
       }>(
-        "https://c765212b-1c21-4d14-98d9-56dd58cc5d3d.mock.pstmn.io/cafes/recommended"
+        "https://test.studyspot.kr/api/cafes/recommended"
       );
       const cafeList = listRes.data.data || [];
       const cafeIds = cafeList.map((cafe) => cafe.id);
 
       const requests = cafeIds.map((id) =>
         axios.get<{ data: Cafe }>(
-          `https://c765212b-1c21-4d14-98d9-56dd58cc5d3d.mock.pstmn.io/cafes/details/${id}`
+          `https://test.studyspot.kr/api/cafes/details/${id}`
         )
       );
       const responses = await Promise.all(requests);

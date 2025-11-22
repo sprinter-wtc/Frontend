@@ -35,16 +35,16 @@ interface Cafe {
 //-----------------------------
 
 const RECOMMENDED_SENTENCES = [
-  "조용하고 밝은 카페 추천해줘",
-  "공부 집중 잘 되는 곳 알려줘",
-  "커피 맛있는 카페 추천해줘",
-  "좌석 편한 카페 있을까?",
-  "대화하기 좋은 카페 알려줘",
+  "✨ 조용하고 밝은 카페 추천해줘",
+  "📚 공부 집중 잘 되는 곳 알려줘",
+  "☕️ 커피 맛있는 카페 추천해줘",
+  "💺 좌석 편한 카페 있을까?",
+  "💬 대화하기 좋은 카페 알려줘",
 ];
 
 // -----------------------------
 const MOCK_SERVER =
-  "https://c765212b-1c21-4d14-98d9-56dd58cc5d3d.mock.pstmn.io";
+  "https://test.studyspot.kr/api";
 const RECOMMENDED_URL = `${MOCK_SERVER}/cafes/recommended`;
 const CAFE_DETAIL_URL = `${MOCK_SERVER}/cafes/details`;
 const DEBOUNCE_DELAY = 400;
@@ -65,10 +65,6 @@ const AiSearchPage: React.FC = () => {
   const [recentQueries, setRecentQueries] = useState<string[]>(() => {
     return JSON.parse(localStorage.getItem("recentQueries") || "[]");
   });
-
-  // -----------------
-  // 검색 전 추천 문장 보여주기
-  // -----------------
 
   // -----------------
   // 입력 디바운스 처리
@@ -103,7 +99,6 @@ const AiSearchPage: React.FC = () => {
   // -----------------
   // 검색 실행 (AI 태그 + 검색어)
   // -----------------
-  // 검색 실행
   const executeSearch = async () => {
     if (!aiQuery.trim()) return;
 
@@ -185,7 +180,6 @@ const AiSearchPage: React.FC = () => {
         </button>
       </div>
 
-      {/* 입력창 */}
       {/* 입력창 + 버튼 래퍼 */}
       <div className="ai-input-wrapper">
         <div>
@@ -273,45 +267,6 @@ const AiSearchPage: React.FC = () => {
         </div>
       )}
 
-      {/* 검색 결과 */}
-      {/* <div className="results">
-        {isLoading ? (
-          <p>로딩 중...</p>
-        ) : searchResults === null ? (
-          <p></p>
-        ) : searchResults.length > 0 ? (
-          searchResults.map((cafe) => (
-            <div
-              key={cafe.id}
-              className="cafe-card cursor-pointer"
-              onClick={() => navigate(`/cafe/${cafe.id}`)}
-            >
-              <img
-                src={
-                  cafe.imageList[0]?.imageUrl ||
-                  "https://via.placeholder.com/80"
-                }
-                alt={cafe.name}
-                className="cafe-thumbnail"
-              />
-              <div className="cafe-info">
-                <h3>{cafe.name}</h3>
-                <p>📍 {cafe.location.join(", ")}</p>
-                <div className="cafe-card-tag-list">
-                  {cafe.purpose.map((t) => (
-                    <span key={t} className="cafe-card-tag">
-                      {t}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          ))
-        ) : (
-          <p></p>
-          // <p>검색 결과가 없습니다.</p>
-        )}
-      </div> */}
       {aiQuery.trim() === "" ? (
         <div className="ai-suggest-box"></div>
       ) : (
