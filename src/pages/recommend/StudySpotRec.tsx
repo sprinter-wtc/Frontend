@@ -59,8 +59,8 @@ const StudySpotRec: React.FC = () => {
       try {
         // 태그가 있을 경우 -> 태그 기반 검색 API 사용
         const apiUrl = selectedTag
-          ? `https://c765212b-1c21-4d14-98d9-56dd58cc5d3d.mock.pstmn.io/cafes?tags=${selectedTag}`
-          : `https://c765212b-1c21-4d14-98d9-56dd58cc5d3d.mock.pstmn.io/cafes/recommended`;
+          ? `https://test.studyspot.kr/api/cafes?tags=${selectedTag}`
+          : `https://test.studyspot.kr/api/cafes/recommended`;
 
         const res = await fetch(apiUrl);
         const json = await res.json();

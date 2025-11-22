@@ -35,7 +35,7 @@ const [recommendedCafes, setRecommendedCafes] = useState<CafeCardData[]>([]);
     const fetchRecommendedCafes = async () => {
       try {
         const res = await fetch(
-          "https://c765212b-1c21-4d14-98d9-56dd58cc5d3d.mock.pstmn.io/cafes/recommended"
+          "https://test.studyspot.kr/api/cafes/recommended"
         );
         const json = await res.json();
         if (json.status === "success") {
