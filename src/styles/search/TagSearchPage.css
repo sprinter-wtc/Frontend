@@ -7,6 +7,7 @@
   font-family: "Pretendard", sans-serif;
   box-sizing: border-box;
   overflow: hidden;
+  height:fit-content
 }
 
 /* 상단 탭 */
@@ -30,7 +31,7 @@
 }
 
 .search-tabs button.active {
-  border-bottom: 3px solid #ffcc66;
+  border-bottom: 3px solid #333;
   color: #333;
 }
 
@@ -69,7 +70,7 @@
 }
 
 .plus-btn:hover {
-  background-color: #ffb84d;
+  background-color: #ccc;
 }
 
 /* 공통 태그 스타일 */
@@ -165,7 +166,7 @@
 /* 검색 버튼 */
 button.ai-input {
   width: 100%;
-  background-color: #ffcc66;
+  background-color: #ddd;
   color: #333;
   font-weight: 600;
   border: none;
@@ -177,7 +178,7 @@ button.ai-input {
 }
 
 button.ai-input:hover {
-  background-color: #ffb84d;
+  background-color: #ccc;
 }
 
 /* 검색 결과 카드 */
