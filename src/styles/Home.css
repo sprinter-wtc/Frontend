@@ -3,14 +3,13 @@
   margin: 0 auto;
   padding: 16px;
   font-family: "Pretendard", sans-serif;
-    padding-bottom: 80px; /* 하단바 높이만큼 여유 */
+    padding-bottom: 80px; 
    overflow-y: auto;
 
 }
 
 /* 검색창 */
 .search-bar {
-  border: 1px red solid;
   display: flex;
   align-items: center;
   background: #ddd;
@@ -110,30 +109,7 @@
   flex-direction: column;
   gap: 12px;
 }
-/* .cafe-card {
-  display: flex;
-  background: #fff;
-  border-radius: 12px;
-  padding: 10px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-  transition: all 0.2s;
-} */
-/* .cafe-card img {
-  width: 70px;
-  height: 70px;
-  border-radius: 8px;
-  margin-right: 10px;
-  border: 1px solid red;
-} */
-/* .cafe-info h3 {
-  margin: 0;
-  font-size: 16px;
-} */
-/* .cafe-info p {
-  margin: 2px 0;
-  font-size: 13px;
-  color: #666;
-} */
+
 .tag-list {
   margin-top: 4px;
 }
