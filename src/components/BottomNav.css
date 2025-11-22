@@ -1,10 +1,10 @@
 .bottom-nav {
   display: flex;
   justify-content: space-around;
-  align-items: center;
+  align-items: center; /* 전체 세로 중앙 정렬 */
   border-top: 1px solid #ddd;
   padding: 12px 0;
-  position: fixed; 
+  position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
@@ -13,50 +13,43 @@
   margin: 0 auto;
   font-family: "Pretendard", sans-serif;
   box-sizing: border-box;
+  z-index: 100;
 }
 
-/* 아이폰 기준 보기 좋게 폰트크기와 터치 영역 조정 */
-.bottom-nav div {
-  flex: 1;
-  text-align: center;
-  font-size: 0.95rem;
-  padding: 8px 0;
-  transition: color 0.2s ease;
-  
-}
-
-.bottom-nav div.active {
-  color: black;
-  font-weight: 600;
-   display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.cursor-pointer {
-  cursor: pointer;
+.nav-item {
   display: flex;
   flex-direction: column;
+  align-items: center; /* 아이콘 + 텍스트 중앙 */
   justify-content: center;
-  
+  cursor: pointer;
+  color: #888;
+  font-size: 0.9rem;
+  transition: color 0.2s ease;
 }
 
-/* 모바일 반응형 (아이폰 16 기준) */
+.nav-item svg {
+  font-size: 28px; /* 아이콘 크기 키움 */
+  margin-bottom: 4px;
+}
+
+.nav-item.active {
+  color: #000;
+  font-weight: 600;
+}
+
+.nav-label {
+  font-size: 0.85rem;
+}
+
+/* 모바일 반응형 */
 @media (max-width: 430px) {
   .bottom-nav {
     padding: 10px 0;
   }
-  .bottom-nav div {
-    font-size: 0.85rem;
-    padding: 7px 0;
+  .nav-item svg {
+    font-size: 24px;
   }
-}
-
-
-.material-symbols-outlined {
-  font-variation-settings:
-  'FILL' 1,
-  'wght' 100,
-  'GRAD' -25,
-  'opsz' 24
+  .nav-label {
+    font-size: 0.8rem;
+  }
 }
