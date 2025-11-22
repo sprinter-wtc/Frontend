@@ -31,7 +31,7 @@
 }
 
 .search-tabs button.active {
-  border-bottom: 3px solid #ffcc66;
+  border-bottom: 3px solid #333;
   font-weight: 600;
   color: #333;
 }
@@ -103,7 +103,7 @@
 }
 
 .recommend-sentences span:hover {
-  background-color: #ffe9b3;
+  background-color: #333;
 }
 
 /* 선택된 태그 영역 */
@@ -115,7 +115,7 @@
 }
 
 .selected-tags .tag {
-  background-color: #ffe599;
+  background-color: #333;
   color: #333;
   padding: 0.8vh 3vw;
   border-radius: 15px;
@@ -125,7 +125,7 @@
 }
 
 .selected-tags .tag.active {
-  background-color: #ffcc66;
+  background-color: #333;
   color: #333;
   font-weight: 500;
 }
@@ -164,8 +164,7 @@
   font-weight: 600;
   margin-bottom: 10px;
 }
-.suggest-section-last-list{
-}
+
 .suggest-section-last-item-wrapper{
   display: flex;
 }

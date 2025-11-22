@@ -44,7 +44,12 @@ const CafeCard: React.FC<CafeCardProps> = ({ cafe }) => {
   };
 
   const openStatus = checkOpenStatus(cafe.startingTime, cafe.closingTime);
-
+  // 이미지 로드 실패 방지
+  const handleImgError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    if (e.currentTarget.src !== fallbackImage) {
+      e.currentTarget.src = fallbackImage;
+    }
+  };
   return (
     <div
       className="cafe-card cursor-pointer"
@@ -52,12 +57,16 @@ const CafeCard: React.FC<CafeCardProps> = ({ cafe }) => {
     >
       <div className="cafe-card-div">
         <div className="cafe-card-img">
-          <img
+          {/* <img
             src={cafe.imageList?.[0]?.imageUrl || fallbackImage}
             alt={cafe.name}
             className="cafe-thumbnail"
-            onError={(e) => (e.currentTarget.src = fallbackImage)}
-          />
+            onError={(e) => {
+              if (e.currentTarget.src !== fallbackImage) {
+                e.currentTarget.src = fallbackImage;
+              }
+            }}
+          /> */}
         </div>
 
         <div className="cafe-info">

@@ -84,7 +84,7 @@ export default function CafeDetailPage() {
     const fetchCafe = async () => {
       try {
         const res = await axios.get<{ data: CafeDetail }>(
-          `https://c765212b-1c21-4d14-98d9-56dd58cc5d3d.mock.pstmn.io/cafes/details/${id}`
+          `https://test.studyspot.kr/api/cafes/details/${id}`
         );
         setCafe(res.data.data);
       } catch (err) {
@@ -101,7 +101,7 @@ export default function CafeDetailPage() {
     const fetchReviews = async () => {
       try {
         const res = await axios.get<{ data: CafeReviews }>(
-          `https://c765212b-1c21-4d14-98d9-56dd58cc5d3d.mock.pstmn.io/reviews/best/${id}`
+          `https://test.studyspot.kr/api/cafes/reviews/best/${id}`
         );
         setReviews(res.data.data);
       } catch (err) {
