@@ -40,11 +40,36 @@ const RECOMMENDED_SENTENCES = [
   "☕️ 커피 맛있는 카페 추천해줘",
   "💺 좌석 편한 카페 있을까?",
   "💬 대화하기 좋은 카페 알려줘",
+  "🌿 분위기 좋은 힐링 카페 알려줘",
+  "🎶 음악 감상하기 좋은 카페 추천해줘",
+  "🖥️ 노트북 작업하기 좋은 카페 있을까?",
+  "🍰 디저트 맛있는 카페 추천해줘",
+  "🏞️ 창가 자리 있는 카페 알려줘",
+  "👩‍💻 혼자 공부하기 좋은 카페 추천해줘",
+  "📷 사진 찍기 좋은 포토스팟 카페 알려줘",
+  "🌸 봄날에 가기 좋은 카페 알려줘",
+  "🥤 다양한 음료 메뉴 있는 카페 추천해줘",
+  "🛋️ 편안한 소파 자리 있는 카페 알려줘",
+  "🎨 아기자기한 인테리어 카페 추천해줘",
+  "🌅 일몰 보기 좋은 카페 알려줘",
+  "🍵 차 종류가 다양한 카페 추천해줘",
+  "🧁 케이크 맛있는 카페 알려줘",
+  "🏡 조용한 동네 카페 추천해줘",
+  "🐶 반려동물 출입 가능한 카페 알려줘",
+  "📖 책 읽기 좋은 카페 추천해줘",
+  "🎧 혼자 음악 들으며 작업하기 좋은 카페 알려줘",
+  "🕯️ 분위기 있는 밤카페 추천해줘",
+  "🍩 간단한 브런치 먹기 좋은 카페 알려줘",
+  "🏙️ 전망 좋은 루프탑 카페 추천해줘",
+  "🖼️ 전시와 함께 즐길 수 있는 카페 추천해줘",
+  "🌻 사진찍기 좋은 플라워 카페 알려줘",
+  "🎯 집중력 높여주는 스터디카페 추천해줘",
+  "🚶‍♂️ 산책 후 들르기 좋은 카페 알려줘",
 ];
 
+
 // -----------------------------
-const MOCK_SERVER =
-  "https://test.studyspot.kr/api";
+const MOCK_SERVER = "https://test.studyspot.kr/api";
 const RECOMMENDED_URL = `${MOCK_SERVER}/cafes/recommended`;
 const CAFE_DETAIL_URL = `${MOCK_SERVER}/cafes/details`;
 const DEBOUNCE_DELAY = 400;
@@ -65,7 +90,13 @@ const AiSearchPage: React.FC = () => {
   const [recentQueries, setRecentQueries] = useState<string[]>(() => {
     return JSON.parse(localStorage.getItem("recentQueries") || "[]");
   });
+  // 랜덤으로 3개 뽑는 함수
+  const [randomSentences, setRandomSentences] = useState<string[]>([]);
 
+  useEffect(() => {
+    const shuffled = [...RECOMMENDED_SENTENCES].sort(() => 0.5 - Math.random());
+    setRandomSentences(shuffled.slice(0, 3));
+  }, []);
   // -----------------
   // 입력 디바운스 처리
   // -----------------
@@ -219,7 +250,7 @@ const AiSearchPage: React.FC = () => {
           <div className="suggest-section-recommend">
             <p className="suggest-section-recommend-title">추천 문장</p>
             <div className="suggest-section-recommend-list">
-              {RECOMMENDED_SENTENCES.map((s, i) => (
+              {randomSentences.map((s, i) => (
                 <button
                   key={i}
                   className="suggest-section-recommend-item"
