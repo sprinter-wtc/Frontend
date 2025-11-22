@@ -5,8 +5,16 @@ import BottomNav from "../components/BottomNav";
 import CafeCard, { CafeCardData } from "../components/cafe/CafeCard";
 import { normalizeCafe } from "../components/utils/normalizeCafe";
 
-interface Category { id: number; name: string; imgUrl?: string; }
-interface Purpose { id: number; name: string; imgUrl?: string; }
+interface Category {
+  id: number;
+  name: string;
+  imgUrl?: string;
+}
+interface Purpose {
+  id: number;
+  name: string;
+  imgUrl?: string;
+}
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -26,11 +34,12 @@ const Home: React.FC = () => {
     { id: 6, name: "단체", imgUrl: "https://placehold.co/80x80" },
   ]);
 
-const [recommendedCafes, setRecommendedCafes] = useState<CafeCardData[]>([]);
+  const [recommendedCafes, setRecommendedCafes] = useState<CafeCardData[]>([]);
 
   // -------------------------------
   // 추천 카페 API fetch
   // -------------------------------
+
   useEffect(() => {
     const fetchRecommendedCafes = async () => {
       try {
@@ -38,8 +47,10 @@ const [recommendedCafes, setRecommendedCafes] = useState<CafeCardData[]>([]);
           "https://test.studyspot.kr/api/cafes/recommended"
         );
         const json = await res.json();
+        console.log("카페추천데이터:", json.data); // 확인용
         if (json.status === "success") {
-          const cafesFromServer = json.data.map(normalizeCafe);
+          const cafesFromServer =
+            json.data.recommendationCafes.map(normalizeCafe);
           setRecommendedCafes(cafesFromServer);
         }
       } catch (err) {
@@ -64,7 +75,7 @@ const [recommendedCafes, setRecommendedCafes] = useState<CafeCardData[]>([]);
           />
         </div>
 
-          {/* 공부 장소 추천 */}
+        {/* 공부 장소 추천 */}
         <section className="category-section">
           <h2>공부 장소 추천</h2>
           <div className="category-grid">
@@ -77,7 +88,7 @@ const [recommendedCafes, setRecommendedCafes] = useState<CafeCardData[]>([]);
           </div>
         </section>
 
-       {/* 카페 이용 목적 */}
+        {/* 카페 이용 목적 */}
         <section className="purpose-section">
           <h2>카페 이용 목적</h2>
           <div className="purpose-grid">
