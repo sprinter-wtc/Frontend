@@ -9,30 +9,24 @@ const BottomNav: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const navItems = [
+    { path: "/timer", label: "타이머", icon: <AlarmIcon /> },
+    { path: "/", label: "홈", icon: <HomeIcon /> },
+    { path: "/ai-search", label: "검색", icon: <SearchIcon /> },
+  ];
+
   return (
     <div className="bottom-nav">
-      <div
-        className={location.pathname === "/timer" ? "active" : "cursor-pointer"}
-        onClick={() => navigate("/timer")}
-      >
-        <AlarmIcon />
-        타이머
-      </div>
-      <div
-        className={location.pathname === "/" ? "active" : "cursor-pointer"}
-        onClick={() => navigate("/")}
-      >
-        <HomeIcon />홈
-      </div>
-      <div
-        className={
-          location.pathname === "/search" ? "active" : "cursor-pointer"
-        }
-        onClick={() => navigate("/search")}
-      >
-        <SearchIcon />
-        검색
-      </div>
+      {navItems.map((item) => (
+        <div
+          key={item.path}
+          className={location.pathname === item.path ? "nav-item active" : "nav-item"}
+          onClick={() => navigate(item.path)}
+        >
+          {item.icon}
+          <span className="nav-label">{item.label}</span>
+        </div>
+      ))}
     </div>
   );
 };

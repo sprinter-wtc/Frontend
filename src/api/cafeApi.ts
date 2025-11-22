@@ -1,8 +1,7 @@
 // src/api/cafeApi.ts
 import axios from "axios";
 
-const BASE_URL = "https://<POSTMAN_MOCK_URL>"; // Postman mock URL
-
+const BASE_URL = "https://test.studyspot.kr/api";
 // ----------------------
 // 타입 정의
 // ----------------------
