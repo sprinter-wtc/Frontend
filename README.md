@@ -2,80 +2,118 @@
 
 ## 📘 프로젝트 개요
 
-> **기분이나 목적에 맞게 최적의 공부 장소를 추천해주는 서비스**
+> **기분·목적·상황에 맞게 최적의 공부 장소를 추천해주는 서비스**
 
-공부할 때마다 “오늘은 집중 잘 되는 카페 없을까?”, “노트북 써도 되는 조용한 곳이 있을까?”  
-하는 고민에서 출발했습니다.  
-그날의 **기분 / 목적 / 공부 스타일**에 맞는 최적의 공부 장소를 추천해주는 서비스를 목표로 합니다.
+"오늘 집중 잘 되는 카페 없을까?"  
+"노트북 사용 가능한 조용한 공간 어디 없지?"  
+
+스터디/개발을 하며 **공간이 몰입도에 큰 영향을 준다는 경험**에서 출발한 서비스입니다.  
+사용자의 **기분 / 목적 / 공부 스타일**에 따라 공부하기 좋은 장소를 추천합니다.
+
+---
+
+## 🚀 배포 주소
+
+- **FE-Live(운영)**: https://studyspot.kr/  
+- **FE-Test(개발)**: https://test.studyspot.kr/
+
+---
+
+## 🖼 주요 화면
+
+| 홈 화면 | AI 검색형 | 선택형 검색 |
+|--------|-----------|-------------|
+| <img width="250" src="https://github.com/user-attachments/assets/44e6123c-8ca3-48da-9891-0ee017300ccf" /> | <img width="256" src="https://github.com/user-attachments/assets/32d1e1b8-912c-4c57-90ac-6ec6edc01fcb" /> | <img width="253" src="https://github.com/user-attachments/assets/a2b132ad-b3cf-4008-91e9-f326b7cec516" /> |
+
+| 카페 상세 | 메뉴 상세 |
+|-----------|-----------|
+| <img width="204" src="https://github.com/user-attachments/assets/e202156a-dfb2-48e6-ad74-4b564a4f805e" /> | <img width="288" src="https://github.com/user-attachments/assets/e5670360-5ffd-4845-8629-b12e7b87a78e" /> |
+
 
 ---
 
 ## 💻 프론트엔드 기술 스택
 
-| 구분                   | 기술                    |
-| ---------------------- | ----------------------- |
-| **Frontend Framework** | React (with TypeScript) |
-| **Styling**            | Tailwind CSS            |
-| **HTTP 통신**          | Axios                   |
-| **Routing**            | React Router DOM        |
-| **State Management**   | Context API             |
-| **Build & Deploy**     | GitHub Pages            |
-| **협업 도구**          | GitHub, Notion, Discord |
+| 구분 | 기술 |
+|------|------|
+| **Framework** | React (CRA, TypeScript) |
+| **Styling** | Tailwind CSS |
+| **Network** | Axios |
+| **Routing** | React Router DOM |
+| **State Management** | Context API |
+| **Map API** | Naver Maps JavaScript API |
+| **Build / Deploy** | Docker, Nginx, GitHub Actions, AWS EC2 |
+| **Collaboration** | GitHub, Notion, Discord |
 
 ---
 
-## ⚙️ 주요 기능 (MVP)
+## ✨ 주요 기능
 
-1. **메인 페이지**
-   - 추천 카테고리 목록 보기
-   - 추천 카페 리스트 보기
-   - 검색창 (텍스트 입력 / 선택형 필터)
-   - 추천 문장, 이전 검색 기록 표시
+### 🏠 메인 페이지
+- 추천 카테고리
+- 추천 카페 리스트
+- 문장 기반 검색 UI
+- 최근 검색 기록
 
-2. **검색 결과 페이지**
-   - 조건에 맞는 카페 검색
-   - 카페 상세보기
+### 🤖 AI 기반 문장 검색
+- 예: "조용하고 콘센트 많은 카페"
+- 자연어 기반 상황 맞춤 추천
 
-3. **카페 상세 정보**
-   - 기본 정보 (이름, 위치, 태그, 영업시간 등)
-   - 메뉴 및 가격 정보
-   - 리뷰 보기 / 작성 / 수정 / 삭제
-   - 평균 별점 보기
+### 🏷 선택형 필터 검색
+- 소음
+- 콘센트
+- 좌석
+- 주차
+- 공간 분위기
+- 시간대/운영시간 등
 
-4. **로그인 / 회원 관리**
-   - 네이버, 카카오 로그인
-   - 사용자 정보 조회
-   - 로그아웃 및 회원 탈퇴
+### 📍 카페 상세 페이지
+- 운영시간, 태그, 좌석 정보
+- 메뉴 및 가격
+- 리뷰 / 별점
+- 네이버 지도 기반 위치 표시
+
+### 🍰 메뉴 상세 페이지
+- 메뉴 이미지
+- 가격 / 구성 정보
+
+### 📝 검색 기록 저장
+- AI 검색 문장 기록 관리
 
 ---
 
-## 📡 API 명세서
+## 📁 폴더 구조
 
-> 기존 명세 동일 (수정 불필요)
-
----
-
-## 🧱 폴더 구조 예시
-
-```bash
-src/
-├── pages/
-│   ├── About.tsx
-│   └── Home.tsx
-├── App.css
-├── App.test.tsx
-├── App.tsx
-├── index.css
-├── index.tsx
-├── logo.svg
-├── react-app-env.d.ts
-├── reportWebVitals.ts
-└── setupTests.ts
+```
+sprint-frontend/
+├── public/
+│   ├── index.html
+│   └── assets/
+├── src/
+│   ├── api/
+│   ├── components/
+│   │   ├── cafe/
+│   │   ├── ui/
+│   │   └── utils/
+│   │       └── normalizeCafe.ts
+│   ├── config/
+│   ├── pages/
+│   │   ├── cafe/
+│   │   ├── recommend/
+│   │   └── search/
+│   ├── styles/
+│   ├── App.tsx
+│   └── index.tsx
+├── Dockerfile
+├── package.json
+└── README.md
 ```
 
 ---
 
-## 🚀 실행 방법
+## 🛠 실행 방법
+
+### 로컬 개발
 
 ```bash
 # 패키지 설치
@@ -88,32 +126,55 @@ npm start
 npm run build
 ```
 
+### Docker 실행
+
+```bash
+docker build -t studyspot-frontend .
+docker run -p 3000:80 studyspot-frontend
+```
+
+---
+
+## 🔄 배포 구조 (CI/CD)
+
+1. GitHub Actions → Docker Build
+2. Docker Hub 푸시
+3. AWS EC2 pull → Nginx로 서빙
+4. main/test 브랜치에 따라 자동 분기 처리
+   - `main` → 운영(frontend)
+   - `test` → 테스트(frontend-test)
+
 ---
 
 ## 🤝 협업 규칙
 
-- **GitHub Flow** 전략 사용  
-  - `main`: 배포용 브랜치  
-  - `feature/브랜치명`: 기능 단위 개발  
-  - PR 머지 전 코드리뷰 필수  
+### GitHub Flow
 
-- **커밋 메시지 규칙**
-  - `feat`: 새로운 기능 추가  
-  - `fix`: 버그 수정  
-  - `refactor`: 코드 리팩토링  
-  - `style`: CSS 및 스타일 관련 수정  
-  - `docs`: 문서 수정  
-  - `chore`: 환경 세팅 및 기타 변경  
+- `main` — 운영 배포
+- `test` — 테스트 배포
+- `feature/*` — 기능 개발 브랜치
 
----
+### Commit Convention
 
-## 📢 협업 채널
-
-- **GitHub**: 코드 버전 관리 및 PR  
-- **Notion**: 기능 기획 및 일정 관리  
-- **Discord**: 데일리 스크럼 및 실시간 커뮤니케이션  
+| 태그 | 설명 |
+|------|------|
+| `feat` | 새로운 기능 |
+| `fix` | 버그 수정 |
+| `refactor` | 코드 리팩토링 |
+| `style` | CSS/스타일 변경 |
+| `docs` | 문서 변경 |
+| `chore` | 설정/환경 작업 |
 
 ---
 
-📅 *Last Updated: 2025.11.09*  
-✍️ *Frontend maintained by sprinter-wtc team*
+## 📢 협업 도구
+
+- GitHub
+- Notion
+- Discord
+
+---
+
+## 📅 Last Updated: 2025.11.23
+
+✍️ **Frontend maintained by sprinter-wtc team**
