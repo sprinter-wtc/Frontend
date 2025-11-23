@@ -1,9 +1,10 @@
+// src/pages/search/cafe/TagSearchPage.tsx
 import "../../styles/search/TagSearchPage.css";
 import React, { useState, useEffect, KeyboardEvent } from "react";
 import BottomNav from "../../components/BottomNav";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { getTags } from "../../api/cafeApi"; // 카테고리별 태그 API
+import { getTags } from "../../api/cafeApi";
 import CafeCard from "../../components/cafe/CafeCard";
 import {
   normalizeCafe,
@@ -13,13 +14,13 @@ import {
 const TAG_MAP: { [key: string]: string[] } = {
   "☕️ 공간종류": ["카페", "스터디카페", "독서실"],
   "💡 조명 밝기": ["어두움", "중간", "밝음"],
-  "👂 소음정도": ["조용함", "적당한소음", "시끌벅적"],
-  "🔌 콘센트": ["없음", "적당히있음", "자리마다있음"],
+  "👂 소음정도": ["조용함", "적당한 소음", "시끌벅적"],
+  "🔌 콘센트": ["콘센트 없음", "콘센트 있음", "콘센트 많음"],
   "⌛️ 시간제한": ["시간제한 있음", "시간제한 없음"],
-  "🚗 주차": ["주차 가능", "유료주차", "주차불가"],
-  "🚥 교통접근성": ["지하철근처", "버스정류장 근처", "접근성좋음"],
-  "🌳 주변환경": ["번화가", "조용한골목", "공원근처", "캠퍼스근처"],
-  "🐶 애견동반": ["애견동반 가능"],
+  "🚗 주차": ["주차 가능", "유료 주차", "주차 불가"],
+  "🚥 교통접근성": ["지하철 근처", "버스정류장 근처", "접근성 좋음"],
+  "🌳 주변환경": ["번화가", "조용한 골목", "공원 근처", "캠퍼스 근처"],
+  "🐶 애견동반": ["애견동반 가능", "애견동반 불가능"],
 };
 
 interface Cafe {
@@ -36,7 +37,7 @@ interface Cafe {
   isWork?: boolean;
   averageStarRating?: number;
   address?: string;
-  imageUrl?: string; // API 기본 이미지
+  imageUrl?: string;
 }
 
 const TagSearchPage: React.FC = () => {
@@ -46,12 +47,15 @@ const TagSearchPage: React.FC = () => {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [storeQuery, setStoreQuery] = useState("");
   const [showResult, setShowResult] = useState(false);
-  const [results, setResults] = useState<Cafe[]>([]);
+  const [results, setResults] = useState<CafeCardData[]>([]);
   const [showAddTags, setShowAddTags] = useState(false);
   const normalizedResults: CafeCardData[] = results.map(normalizeCafe);
 
   const [tagsMap, setTagsMap] = useState<{ [key: string]: string[] }>(TAG_MAP);
 
+  // ---------------------
+  // 태그 API 호출
+  // ---------------------
   useEffect(() => {
     const fetchTags = async () => {
       try {
@@ -59,7 +63,7 @@ const TagSearchPage: React.FC = () => {
         const newTagsMap: { [key: string]: string[] } = {};
 
         for (const category of categories) {
-          const tagsFromApi = await getTags(category);
+          const tagsFromApi = await getTags(category); // searchPhrase 기반
           newTagsMap[category] = tagsFromApi.length
             ? tagsFromApi
             : TAG_MAP[category];
@@ -71,7 +75,6 @@ const TagSearchPage: React.FC = () => {
         setTagsMap(TAG_MAP);
       }
     };
-
     fetchTags();
   }, []);
 
@@ -102,34 +105,23 @@ const TagSearchPage: React.FC = () => {
   // ---------------------
   const executeSearch = async () => {
     try {
-      const listRes = await axios.get<{
-        data: { id: number }[];
-      }>(
-        "https://test.studyspot.kr/api/cafes/recommended"
-      );
-      const cafeList = listRes.data.data || [];
-      const cafeIds = cafeList.map((cafe) => cafe.id);
+      const params = new URLSearchParams();
+      if (storeQuery) params.append("nameOfCafe", storeQuery);
+      if (selectedTags.length)
+        selectedTags.forEach((tag) => params.append("tags", tag));
 
-      const requests = cafeIds.map((id) =>
-        axios.get<{ data: Cafe }>(
-          `https://test.studyspot.kr/api/cafes/details/${id}`
-        )
-      );
-      const responses = await Promise.all(requests);
-      const cafes = responses.map((res) => res.data.data);
-
-      const filtered = cafes.filter(
-        (cafe) =>
-          (!storeQuery || cafe.name.includes(storeQuery)) &&
-          selectedTags.every(
-            (tag) =>
-              cafe.purpose.includes(tag) ||
-              cafe.tags[tag] ||
-              cafe.category === tag
-          )
+      const res = await axios.get<{ data: { cafes: Cafe[] } }>(
+        `https://studyspot.kr/api/cafes?${params.toString()}`
       );
 
-      setResults(filtered);
+      const cafes = Array.isArray(res.data.data?.cafes)
+        ? res.data.data.cafes
+        : [];
+
+      // ★ normalizeCafe 적용 ★
+      const normalized = cafes.map(normalizeCafe);
+
+      setResults(normalized);
       setShowResult(true);
     } catch (err) {
       console.error("[ERROR] 카페 검색 실패:", err);
@@ -139,9 +131,7 @@ const TagSearchPage: React.FC = () => {
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      executeSearch();
-    }
+    if (e.key === "Enter") executeSearch();
   };
 
   useEffect(() => {
@@ -172,7 +162,7 @@ const TagSearchPage: React.FC = () => {
   };
 
   return (
-    <div className="search-container no-scroll">
+    <div className="search-container">
       {/* 상단 탭 */}
       <div className="search-tabs">
         <button
@@ -206,6 +196,7 @@ const TagSearchPage: React.FC = () => {
               ))
             )}
           </div>
+
           <div>
             <div>
               <p>🌳 상호명 </p>
@@ -218,6 +209,7 @@ const TagSearchPage: React.FC = () => {
                 className="ai-input w-full p-2 border rounded mb-2"
               />
             </div>
+
             <div className="tag-options">
               {Object.entries(tagsMap).map(([category, options]) => (
                 <div key={category} className="filter-section">
@@ -238,18 +230,20 @@ const TagSearchPage: React.FC = () => {
               ))}
             </div>
           </div>
+
           <button type="button" className="ai-input" onClick={executeSearch}>
             검색
           </button>
         </>
       ) : (
         <>
-          <div className="w-full text-left ">
+          <div className="w-full text-left">
             <button type="button" onClick={() => setShowResult(false)}>
-              <span className="material-symbols-outlined">arrow_back_ios</span>{" "}
+              <span className="material-symbols-outlined">arrow_back_ios</span>
             </button>
           </div>
-          <div className="cafe-name-search-bar mb-2 ">
+
+          <div className="cafe-name-search-bar mb-2">
             🌳 상호명
             <input
               type="text"
@@ -275,7 +269,7 @@ const TagSearchPage: React.FC = () => {
                   {tag}
                 </span>
               ))}
-            </div>{" "}
+            </div>
             <button
               type="button"
               onClick={() => setShowAddTags((s) => !s)}
@@ -307,7 +301,7 @@ const TagSearchPage: React.FC = () => {
           )}
 
           <div className="results scroll-area">
-            {normalizedResults.map((cafe) => (
+            {results.map((cafe) => (
               <CafeCard key={cafe.id} cafe={cafe} />
             ))}
           </div>

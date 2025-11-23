@@ -67,9 +67,8 @@ const RECOMMENDED_SENTENCES = [
   "🚶‍♂️ 산책 후 들르기 좋은 카페 알려줘",
 ];
 
-
 // -----------------------------
-const MOCK_SERVER = "https://test.studyspot.kr/api";
+const MOCK_SERVER = "https://studyspot.kr/api";
 const RECOMMENDED_URL = `${MOCK_SERVER}/cafes/recommended`;
 const CAFE_DETAIL_URL = `${MOCK_SERVER}/cafes/details`;
 const DEBOUNCE_DELAY = 400;

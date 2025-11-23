@@ -84,7 +84,7 @@ export default function CafeDetailPage() {
     const fetchCafe = async () => {
       try {
         const res = await axios.get<{ data: CafeDetail }>(
-          `https://test.studyspot.kr/api/cafes/details/${id}`
+          `https://studyspot.kr/api/cafes/details/${id}`
         );
         setCafe(res.data.data);
       } catch (err) {
@@ -101,7 +101,7 @@ export default function CafeDetailPage() {
     const fetchReviews = async () => {
       try {
         const res = await axios.get<{ data: CafeReviews }>(
-          `https://test.studyspot.kr/api/cafes/reviews/best/${id}`
+          `https://studyspot.kr/api/cafes/reviews/best/${id}`
         );
         setReviews(res.data.data);
       } catch (err) {

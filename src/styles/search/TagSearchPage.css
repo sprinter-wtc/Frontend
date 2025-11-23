@@ -1,3 +1,10 @@
+:root {
+  --bg: #fff7ed; /* 따뜻한 크림 베이스 */
+  --highlight: #ffe4d6;
+  --primary: #e4afaf; /* 말린장미 포인트 */
+  --border: #e9d5ca;
+  --text: #5a4a42;
+}
 /* 전체 컨테이너 */
 .search-container {
   max-width: 420px;
@@ -7,14 +14,19 @@
   font-family: "Pretendard", sans-serif;
   box-sizing: border-box;
   overflow: hidden;
+  height: fit-content;
+  
 }
-
+.ai-input {
+  border: 1px solid #e4afaf;
+  border-radius: 12px;
+}
 /* 상단 탭 */
 .search-tabs {
   display: flex;
   justify-content: space-around;
   margin-bottom: 16px;
-  border-bottom: 1.5px solid #ddd;
+  border-bottom: 1.5px solid #e4afaf;
 }
 
 .search-tabs button {
@@ -30,8 +42,9 @@
 }
 
 .search-tabs button.active {
-  border-bottom: 3px solid #ffcc66;
-  color: #333;
+  border-bottom: 3px solid #e4afaf;
+  color: #e4afaf;
+
 }
 
 /* 선택된 태그 영역 */
@@ -62,14 +75,14 @@
   font-size: 18px;
   border-radius: 10px;
   border: none;
-  background-color: #ddd;
+  background-color: #e4afaf;
   cursor: pointer;
   transition: all 0.2s;
   text-align: right;
 }
 
 .plus-btn:hover {
-  background-color: #ffb84d;
+  background-color: #ccc;
 }
 
 /* 공통 태그 스타일 */
@@ -80,8 +93,9 @@
   font-size: 14px;
   cursor: pointer;
   transition: all 0.2s;
-  background-color: #ddd;
+  background-color: #ffffff;
   color: #333;
+  border: 1px solid #e4afaf;
 }
 
 /* 선택된 태그 색상 */
@@ -103,11 +117,13 @@
 /* 공간 종류 hover */
 .tag.space-type:hover {
   background-color: #a9d6a3;
+  border: none;
 }
 
 /* 일반 태그 hover */
 .tag:not(.space-type):hover {
   background-color: #d47b7b;
+  border: none;
 }
 
 /* 태그 옵션 영역 */
@@ -117,7 +133,7 @@
   padding: 8px;
   font-weight: 600;
   border-radius: 12px;
-  border: 1px solid #ddd;
+  border: 1px solid #e4afaf;
   margin-bottom: 12px;
 }
 
@@ -165,7 +181,7 @@
 /* 검색 버튼 */
 button.ai-input {
   width: 100%;
-  background-color: #ffcc66;
+  background-color: #e4afaf;
   color: #333;
   font-weight: 600;
   border: none;
@@ -177,7 +193,9 @@ button.ai-input {
 }
 
 button.ai-input:hover {
-  background-color: #ffb84d;
+  background-color: #e4afaf;
+
+
 }
 
 /* 검색 결과 카드 */
@@ -185,23 +203,3 @@ button.ai-input:hover {
   margin-top: 12px;
   border: 1px solid red;
 }
-/* 
-.cafe-card {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  border: 1px solid #eee;
-  border-radius: 12px;
-  padding: 12px;
-  margin-bottom: 12px;
-  background-color: #fff;
-  transition: all 0.2s;
-} */
-
-
-/* 
-.cafe-name-search-bar input {
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  background-color: #ddd;
-} */
