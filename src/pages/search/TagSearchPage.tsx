@@ -5,7 +5,10 @@ import BottomNav from "../../components/BottomNav";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import CafeCard from "../../components/cafe/CafeCard";
-import { normalizeCafe, CafeCardData } from "../../components/utils/normalizeCafe";
+import {
+  normalizeCafe,
+  CafeCardData,
+} from "../../components/utils/normalizeCafe";
 
 const TAG_MAP: { [key: string]: string[] } = {
   "☕️ 공간종류": ["카페", "스터디카페", "독서실"],
@@ -72,57 +75,56 @@ const TagSearchPage: React.FC = () => {
   // ---------------------
   // 검색 실행
   // ---------------------
-const executeSearch = async () => {
-  try {
-    if (!storeQuery && selectedTags.length === 0) {
-      console.log("[INFO] 검색 조건 없음");
+  const executeSearch = async () => {
+    try {
+      if (!storeQuery && selectedTags.length === 0) {
+        console.log("[INFO] 검색 조건 없음");
+        setResults([]);
+        setShowResult(false);
+        return;
+      }
+
+      const params = new URLSearchParams();
+      if (storeQuery) params.append("nameOfCafe", storeQuery);
+      if (selectedTags.length)
+        selectedTags.forEach((tag) => params.append("tags", tag));
+
+      console.log("[DEBUG] 검색 파라미터:", params.toString());
+
+      const res = await axios.get<{ data: { cafes: Cafe[] } }>(
+        `https://studyspot.kr/api/cafes?${params.toString()}`
+      );
+
+      console.log("[DEBUG] API 응답 데이터:", res.data);
+
+      const cafes = Array.isArray(res.data.data?.cafes)
+        ? res.data.data.cafes
+        : [];
+
+      const normalized = cafes.map(normalizeCafe);
+
+      console.log("[DEBUG] 정규화된 결과:", normalized);
+
+      const filtered = selectedTags.length
+        ? normalized.filter((cafe) =>
+            selectedTags.every((tag) => {
+              if (SPACE_TAGS.has(tag)) return cafe.category === tag;
+              // cafe.tags가 객체일 경우 Object.values 사용
+              return Object.values(cafe.tags || {}).includes(tag);
+            })
+          )
+        : normalized;
+
+      console.log("[DEBUG] 필터링된 결과:", filtered);
+
+      setResults(filtered);
+      setShowResult(true);
+    } catch (err) {
+      console.error("[ERROR] 카페 검색 실패:", err);
       setResults([]);
       setShowResult(false);
-      return;
     }
-
-    const params = new URLSearchParams();
-    if (storeQuery) params.append("nameOfCafe", storeQuery);
-    if (selectedTags.length)
-      selectedTags.forEach((tag) => params.append("tags", tag));
-
-    console.log("[DEBUG] 검색 파라미터:", params.toString());
-
-    const res = await axios.get<{ data: { cafes: Cafe[] } }>(
-      `https://studyspot.kr/api/cafes?${params.toString()}`
-    );
-
-    console.log("[DEBUG] API 응답 데이터:", res.data);
-
-    const cafes = Array.isArray(res.data.data?.cafes)
-      ? res.data.data.cafes
-      : [];
-
-    const normalized = cafes.map(normalizeCafe);
-
-    console.log("[DEBUG] 정규화된 결과:", normalized);
-
-    const filtered = selectedTags.length
-      ? normalized.filter((cafe) =>
-          selectedTags.every((tag) => {
-            if (SPACE_TAGS.has(tag)) return cafe.category === tag;
-            // cafe.tags가 객체일 경우 Object.values 사용
-            return Object.values(cafe.tags || {}).includes(tag);
-          })
-        )
-      : normalized;
-
-    console.log("[DEBUG] 필터링된 결과:", filtered);
-
-    setResults(filtered);
-    setShowResult(true);
-  } catch (err) {
-    console.error("[ERROR] 카페 검색 실패:", err);
-    setResults([]);
-    setShowResult(false);
-  }
-};
-
+  };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") executeSearch();
