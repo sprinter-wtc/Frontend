@@ -44,6 +44,7 @@
 .search-tabs button.active {
   border-bottom: 3px solid #e4afaf;
   color: #e4afaf;
+
 }
 
 /* 선택된 태그 영역 */
@@ -193,6 +194,8 @@ button.ai-input {
 
 button.ai-input:hover {
   background-color: #e4afaf;
+
+
 }
 
 /* 검색 결과 카드 */
