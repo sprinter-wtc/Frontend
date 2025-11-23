@@ -12,34 +12,28 @@ const StudySpotRec: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  interface Category {
+  interface Tag {
     id: number;
     name: string;
-    imgUrl?: string;
-  }
-  interface Purpose {
-    id: number;
-    name: string;
-    imgUrl?: string;
+    emoji: string;
+    type: "category" | "purpose";
   }
 
   // Home에서 넘어온 선택 태그
   const initialTag = location.state?.filterTag || null;
 
   // 고정된 필터 태그 목록
-  const [categories, setCategories] = useState<Category[]>([
-    { id: 1, name: "카페", imgUrl: "https://placehold.co/80x80" },
-    { id: 2, name: "스터디 카페", imgUrl: "https://placehold.co/80x80" },
-    { id: 3, name: "독서실", imgUrl: "https://placehold.co/80x80" },
-  ]);
+  const [tags, setTags] = useState<Tag[]>([
+    { id: 1, name: "스터디카페", emoji: "📚", type: "category" },
+    { id: 2, name: "대형카페", emoji: "☕️", type: "category" },
+    { id: 3, name: "조용한 카페", emoji: "🤫", type: "category" },
 
-  const [purposes, setPurposes] = useState<Purpose[]>([
-    { id: 1, name: "책", imgUrl: "https://placehold.co/80x80" },
-    { id: 2, name: "노트북", imgUrl: "https://placehold.co/80x80" },
-    { id: 3, name: "데이트", imgUrl: "https://placehold.co/80x80" },
-    { id: 4, name: "휴식", imgUrl: "https://placehold.co/80x80" },
-    { id: 5, name: "포토스팟", imgUrl: "https://placehold.co/80x80" },
-    { id: 6, name: "단체", imgUrl: "https://placehold.co/80x80" },
+    { id: 4, name: "책", emoji: "📖", type: "purpose" },
+    { id: 5, name: "노트북", emoji: "💻", type: "purpose" },
+    { id: 6, name: "데이트", emoji: "💘", type: "purpose" },
+    { id: 7, name: "휴식", emoji: "😌", type: "purpose" },
+    { id: 8, name: "포토스팟", emoji: "📸", type: "purpose" },
+    { id: 9, name: "단체", emoji: "👥", type: "purpose" },
   ]);
 
   const [selectedTag, setSelectedTag] = useState<string | null>(initialTag);
@@ -47,9 +41,6 @@ const StudySpotRec: React.FC = () => {
   const [recommendedCafes, setRecommendedCafes] = useState<CafeCardData[]>([]);
   const [showMore, setShowMore] = useState(false);
   // 태그 배열 합치기
-  const allTags = [...categories, ...purposes];
-  const defaultTags = allTags.slice(0, 4); // 기본으로 보이는 4개
-  const hiddenTags = allTags.slice(4);
 
   // -------------------------------
   // 선택된 태그 기반으로 API 요청
@@ -59,8 +50,8 @@ const StudySpotRec: React.FC = () => {
       try {
         // 태그가 있을 경우 -> 태그 기반 검색 API 사용
         const apiUrl = selectedTag
-          ? `https://test.studyspot.kr/api/cafes?tags=${selectedTag}`
-          : `https://test.studyspot.kr/api/cafes/recommended`;
+          ? `https://studyspot.kr/api/cafes?tags=${selectedTag}`
+          : `https://studyspot.kr/api/cafes/recommended`;
 
         const res = await fetch(apiUrl);
         const json = await res.json();
@@ -95,15 +86,15 @@ const StudySpotRec: React.FC = () => {
             {/* 공부 장소 추천 */}
             <section>
               <div className="tag-row">
-                {defaultTags.map((tag) => (
+                {tags.slice(0, 4).map((tag) => (
                   <div key={tag.id} className="tag-item">
-                    <img src={tag.imgUrl} alt={tag.name} />
+                    <span className="emoji">{tag.emoji}</span>
                     <span>{tag.name}</span>
                   </div>
                 ))}
 
-                {/* 더보기 버튼을 마지막 태그 옆에 */}
-                {hiddenTags.length > 0 && (
+                {/* 더보기 버튼 */}
+                {tags.length > 4 && (
                   <button
                     className="dropdown-btn"
                     onClick={() => setShowMore(!showMore)}
@@ -112,24 +103,21 @@ const StudySpotRec: React.FC = () => {
                   </button>
                 )}
 
-                {/* 펼쳐진 숨겨진 태그들 */}
                 {showMore &&
-                  hiddenTags.map((tag) => (
+                  tags.slice(4).map((tag) => (
                     <div key={tag.id} className="tag-item hidden-inline">
-                      <img src={tag.imgUrl} alt={tag.name} />
+                      <span className="emoji">{tag.emoji}</span>
                       <span>{tag.name}</span>
                     </div>
                   ))}
               </div>
-
-             
             </section>
           </div>
         </div>
         <hr></hr>
-       
+
         {/*     추천 카페 리스트       */}
-        <div className="recommend-section">
+        {/* <div className="recommend-section">
           <section>
             <h2>추천 카페 리스트</h2>
             <div className="cafe-list">
@@ -142,7 +130,7 @@ const StudySpotRec: React.FC = () => {
               )}
             </div>
           </section>
-        </div>
+        </div> */}
       </div>
 
       <BottomNav />

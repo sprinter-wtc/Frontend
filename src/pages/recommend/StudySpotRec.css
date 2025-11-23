@@ -16,27 +16,33 @@
   margin-bottom: 20px;
   cursor: pointer;
 }
-/* 상단 선택창  */
-/* .studyspotrec-filter {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 20px;
-  width: 100%;
-} */
 
-.studyspotrec-top-section{
-  /* border: solid 1px green; */
-  /* float: left; */
-  
-}
-.studyspotrec-top-section div{
+.studyspotrec-top-section div {
   border: solid 1px red;
 }
 
-.studyspotrec-top-select{
-  float: left;
+.studyspotrec-top-select {
+  width: 100%;
+  margin-bottom: 12px;
 }
+.tag-scroll-wrapper {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-right: 30px; /* 버튼 영역 공간 확보 */
+  scrollbar-width: none; /* Firefox */
+}
+.tag-scroll-wrapper::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+.tag-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
+}
+
 /* 태그 필터*/
 .filter-tags-container {
   margin: 20px 0;
@@ -64,20 +70,31 @@
   flex-wrap: wrap; /* 화면 좁으면 줄 바꿈 가능 */
   align-items: center; /* 버튼과 태그 세로 정렬 */
   gap: 8px;
+  overflow-x: auto; /* 가로 스크롤 */
+  
 }
 
+/* 태그 개별 박스 */
 .tag-item {
+  min-width: 60px;
+  text-align: center;
+  font-size: 13px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-size: 14px;
 }
 
+
+/* 더보기 버튼 (오른쪽 고정) */
 .dropdown-btn {
+  /* position: absolute; */
+  /* right: 0;
+  top: 0; */
+  background: white;
   border: none;
-  background: transparent;
   font-size: 20px;
   cursor: pointer;
+  padding: 4px;
 }
 
 .hidden-inline {
@@ -92,7 +109,13 @@
   gap: 10px;
   margin-top: 10px;
 }
-
+.tag-more-section {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 12px;
+}
 /*  추천 카페 리스트 */
 .recommend-section {
   margin-top: 10vh;
@@ -105,18 +128,16 @@
   gap: 12px;
 }
 
-/* 태그 리스트 (카페 카드 내부) */
-
-
-
-
 /* 하단 네비게이션 */
 
-
-/*   반응형 */
+/* 반응형 */
 @media (max-width: 420px) {
-  .filter-tag {
-    font-size: 13px;
-    padding: 5px 10px;
+  .tag-item {
+    font-size: 12px;
+    min-width: 50px;
+  }
+
+  .dropdown-btn {
+    font-size: 18px;
   }
 }

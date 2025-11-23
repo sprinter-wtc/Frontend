@@ -6,7 +6,10 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { getTags } from "../../api/cafeApi";
 import CafeCard from "../../components/cafe/CafeCard";
-import { normalizeCafe, CafeCardData } from "../../components/utils/normalizeCafe";
+import {
+  normalizeCafe,
+  CafeCardData,
+} from "../../components/utils/normalizeCafe";
 
 const TAG_MAP: { [key: string]: string[] } = {
   "☕️ 공간종류": ["카페", "스터디카페", "독서실"],
@@ -44,7 +47,7 @@ const TagSearchPage: React.FC = () => {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [storeQuery, setStoreQuery] = useState("");
   const [showResult, setShowResult] = useState(false);
-  const [results, setResults] = useState<Cafe[]>([]);
+  const [results, setResults] = useState<CafeCardData[]>([]);
   const [showAddTags, setShowAddTags] = useState(false);
   const normalizedResults: CafeCardData[] = results.map(normalizeCafe);
 
@@ -61,7 +64,9 @@ const TagSearchPage: React.FC = () => {
 
         for (const category of categories) {
           const tagsFromApi = await getTags(category); // searchPhrase 기반
-          newTagsMap[category] = tagsFromApi.length ? tagsFromApi : TAG_MAP[category];
+          newTagsMap[category] = tagsFromApi.length
+            ? tagsFromApi
+            : TAG_MAP[category];
         }
 
         setTagsMap(newTagsMap);
@@ -102,14 +107,21 @@ const TagSearchPage: React.FC = () => {
     try {
       const params = new URLSearchParams();
       if (storeQuery) params.append("nameOfCafe", storeQuery);
-      if (selectedTags.length) selectedTags.forEach((tag) => params.append("tags", tag));
+      if (selectedTags.length)
+        selectedTags.forEach((tag) => params.append("tags", tag));
 
       const res = await axios.get<{ data: { cafes: Cafe[] } }>(
         `https://studyspot.kr/api/cafes?${params.toString()}`
       );
 
-      const cafes = Array.isArray(res.data.data?.cafes) ? res.data.data.cafes : [];
-      setResults(cafes);
+      const cafes = Array.isArray(res.data.data?.cafes)
+        ? res.data.data.cafes
+        : [];
+
+      // ★ normalizeCafe 적용 ★
+      const normalized = cafes.map(normalizeCafe);
+
+      setResults(normalized);
       setShowResult(true);
     } catch (err) {
       console.error("[ERROR] 카페 검색 실패:", err);
@@ -244,7 +256,8 @@ const TagSearchPage: React.FC = () => {
 
           <div className="selected-tags">
             <div>
-              <span className="material-symbols-outlined">tag</span>태그를 선택해 주세요.
+              <span className="material-symbols-outlined">tag</span>태그를
+              선택해 주세요.
             </div>
             <div>
               {selectedTags.map((tag) => (
@@ -288,7 +301,7 @@ const TagSearchPage: React.FC = () => {
           )}
 
           <div className="results scroll-area">
-            {normalizedResults.map((cafe) => (
+            {results.map((cafe) => (
               <CafeCard key={cafe.id} cafe={cafe} />
             ))}
           </div>
