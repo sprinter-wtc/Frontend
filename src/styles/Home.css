@@ -1,28 +1,41 @@
+:root {
+  --bg: #FFF7ED; /* 따뜻한 크림 베이스 */
+  --highlight: #FFE4D6; 
+  --primary: #E4AFAF; /* 말린장미 포인트 */
+  --border: #E9D5CA;
+  --text: #5A4A42;
+}
+
 .home-container {
   max-width: 420px;
   margin: 0 auto;
   padding: 16px;
   font-family: "Pretendard", sans-serif;
-    padding-bottom: 80px; 
-   overflow-y: auto;
-
+  padding-bottom: 80px;
+  overflow-y: auto;
+  background-color: #FFF7ED;
+}
+.emoji {
+  font-size: 2.4rem;
+  display: block;
+  margin-bottom: 6px;
 }
 
 /* 검색창 */
 .search-bar {
   display: flex;
   align-items: center;
-  background: #ddd;
+  background: #FFE4D6;
   border-radius: 20px;
   padding: 8px 12px;
   max-width: 420px;
 }
-.search-bar:hover{
-  cursor :grab;
+.search-bar:hover {
+  cursor: grab;
 }
 
 .search-bar input {
-    border: 1px orange solid;
+  border: 1px #E4AFAF solid;
 
   flex: 1;
   border: none;
@@ -39,7 +52,7 @@
 
 /* 공부 장소 추천 */
 .category-section {
-  margin-top:  10vh;
+  margin-top: 10vh;
   margin-bottom: 10vh;
 }
 .category-section.center {
@@ -48,9 +61,14 @@
   align-items: center;
 }
 .category-grid {
- display: grid;
+  cursor: pointer;
+  display: grid;
   grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
   gap: 10px;
+}
+.category-grid :hover{
+  background: #FFE4D6;
+ 
 }
 .category-item {
   display: flex;
@@ -60,6 +78,8 @@
   border-radius: 10px;
   padding: 8px;
   transition: all 0.2s;
+  border: 1px solid #E4AFAF;
+  border-radius: 12px;
 }
 .category-item img {
   width: 80px;
@@ -78,7 +98,12 @@
   grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
   gap: 10px;
 }
+.purpose-grid :hover{
+  background: #FFE4D6;
+ 
+}
 .purpose-item {
+  cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -86,7 +111,10 @@
   border-radius: 10px;
   padding: 8px;
   transition: all 0.2s;
+  border: 1px solid #E4AFAF;
+  border-radius: 12px;
 }
+
 .purpose-item img {
   width: 80px;
   height: 80px;
@@ -95,7 +123,7 @@
   border-radius: 8px;
 }
 .purpose-item span {
-  font-size: 14px;
+  /* font-size: 14px; */
   font-weight: 500;
 }
 
@@ -127,7 +155,7 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
-  border-top: 1px solid #ddd;
+  border-top: 1px solid #E4AFAF;
   padding: 10px 0;
   position: fixed;
   bottom: 0;
