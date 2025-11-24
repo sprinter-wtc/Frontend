@@ -1,8 +1,8 @@
 /* CafeDetail.css */
 
 .cafe-detail-page {
- max-width: 420px;
-   margin: 0 auto;
+  max-width: 420px;
+  margin: 0 auto;
   padding: 16px;
   font-family: "Noto Sans KR", sans-serif;
   padding-bottom: 100px;
@@ -40,7 +40,7 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background-color: rgba(0,0,0,0.4);
+  background-color: rgba(0, 0, 0, 0.4);
   color: white;
   border: none;
   border-radius: 50%;
@@ -164,7 +164,91 @@
   font-size: 2rem;
   font-weight: bold;
 }
+/* 베스트 리뷰 블록 */
+.best-review-block {
+  margin-top: 20px;
+  padding: 16px;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+}
 
+/* 베스트 리뷰 헤더: 제목 + 버튼 가로 정렬 */
+.best-review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+/* 베스트 리뷰 제목 */
+.best-review-header h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* 전체 리뷰 페이지 버튼 */
+.view-all-btn {
+  padding: 6px 12px;
+  background-color: #4a90e2;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.view-all-btn:hover {
+  background-color: #357ab8;
+}
+
+/* 베스트 리뷰 카드 */
+.review-card.best {
+  border: 1px solid #ffd700; /* 베스트 리뷰 강조 */
+  background-color: #fffbea;
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.review-card.best img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+  flex-shrink: 0; /* 이미지 고정 크기 */
+}
+/* 리뷰 내용 (텍스트) */
+.review-card.best .review-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1; /* 남는 공간 채우기 */
+}
+.review-content {
+  /* border: 1px solid blue; */
+  height: 100%;
+}
+/* 리뷰 작성자 및 별점 */
+.review-card.best .review-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* 리뷰 내용 텍스트 */
+.review-card.best p {
+  font-size: 13px;
+  color: #333;
+  margin: 0;
+}
 /* 별점 */
 .stars {
   color: #ccc;
