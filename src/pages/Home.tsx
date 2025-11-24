@@ -131,8 +131,9 @@ const Home: React.FC = () => {
 
       {/* 하단 네비게이션 */}
       <BottomNav />
+
     </div>
   );
-};
+}
 
 export default Home;

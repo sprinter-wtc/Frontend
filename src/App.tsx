@@ -5,10 +5,12 @@ import Home from "./pages/Home"; // 홈 페이지
 import CafeDetailPage from "./pages/cafe/CafeDetailPage";
 import StudySpotRec from "./pages/recommend/StudySpotRec";
 import CafeReviewPage from "./pages/cafe/CafeReviewPage";
+import About from "./pages/About";
 
 function App() {
   return (
     <Router>
+    
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/ai-search" element={<AiSearchPage />} />
@@ -22,6 +24,7 @@ function App() {
         <Route path="/timer" element={<div>timer</div>} />
         <Route path="studyspot-rec" element={<StudySpotRec />} />
         <Route path="/reviews/:cafeId" element={<CafeReviewPage />} />
+        <Route path="/about" element={<About />} />
       </Routes>
     </Router>
   );
