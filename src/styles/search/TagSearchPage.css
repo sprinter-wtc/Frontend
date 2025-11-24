@@ -18,9 +18,12 @@
 
 
 }
-.ai-input {
-  border: 1px solid #e4afaf;
+.ai-input{
   border-radius: 12px;
+}
+.tag-input {
+  border-radius: 12px;
+  border: 1px solid #e4afaf;
 }
 /* 상단 탭 */
 .search-tabs {
@@ -201,5 +204,5 @@ button.ai-input:hover {
 /* 검색 결과 카드 */
 .results {
   margin-top: 12px;
-  border: 1px solid red;
+  /* border: 1px solid red; */
 }

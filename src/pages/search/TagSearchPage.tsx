@@ -215,7 +215,7 @@ const TagSearchPage: React.FC = () => {
                 value={storeQuery}
                 onChange={(e) => setStoreQuery(e.target.value)}
                 onKeyDown={handleKeyDown}
-                className="ai-input w-full p-2 border rounded mb-2"
+                className="tag-input w-full p-2 border rounded mb-2"
               />
             </div>
 
