@@ -19,8 +19,7 @@ function App() {
         {/* <Route path="/cafe-detail" element={<CafeDetail/>}/> */}
         <Route path="/cafe/:id" element={<CafeDetailPage />} />
         <Route path="studyspot-rec" element={<StudySpotRec/>} />
-        /*안드로이드 WebView가 타이머 클릭 시 가로채기 위해 반드시 필요함*/ 
-        <Route path="/timer" element={<div>timer</div>} />
+
       </Routes>
     </Router>
   );

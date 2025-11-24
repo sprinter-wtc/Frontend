@@ -2,7 +2,6 @@
 import axios from "axios";
 
 const BASE_URL = "https://studyspot.kr/api";
-
 // ----------------------
 // 타입 정의
 // ----------------------

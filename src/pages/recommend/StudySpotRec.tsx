@@ -7,7 +7,6 @@ import {
   normalizeCafe,
   CafeCardData,
 } from "../../components/utils/normalizeCafe";
-import { API_BASE_URL } from "../../config/api";
 
 const StudySpotRec: React.FC = () => {
   const navigate = useNavigate();

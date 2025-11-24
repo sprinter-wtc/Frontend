@@ -9,7 +9,6 @@ import {
   normalizeCafe,
   CafeCardData,
 } from "../../components/utils/normalizeCafe";
-import { API_BASE_URL } from "../../config/api";
 
 const TAG_MAP: { [key: string]: string[] } = {
   "☕️ 공간종류": ["카페", "스터디카페", "독서실"],

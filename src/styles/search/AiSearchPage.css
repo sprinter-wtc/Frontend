@@ -1,13 +1,19 @@
+:root {
+  --bg: #fff7ed; /* 따뜻한 크림 베이스 */
+  --highlight: #ffe4d6;
+  --primary: #e4afaf; /* 말린장미 포인트 */
+  --border: #e9d5ca;
+  --text: #5a4a42;
+}
 /* 전체 레이아웃 */
 .search-container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  padding: 4vw;
+  height: 100vh; /* 화면 전체 높이 */
   box-sizing: border-box;
-  overflow-y: auto;
-  background-color: #ffffff;
-  padding-bottom: 15vh;
+  overflow-y: auto; /* 전체 화면 스크롤 */
+  background-color: var(--bg);
+  padding: 4vw 4vw 15vh 4vw; /* 하단바 공간 확보 */
 }
 
 /* 상단 탭 */
@@ -31,9 +37,15 @@
 }
 
 .search-tabs button.active {
-  border-bottom: 3px solid #333;
   font-weight: 600;
   color: #333;
+}
+.ai-search-page-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5vh;
+  width: 100%;
+  overflow: visible;
 }
 
 /* AI 검색 영역 */
@@ -48,8 +60,9 @@
 .ai-input-wrapper {
   position: relative;
   width: 100%;
-  border: 1px solid #ccc;
+  border: 1px solid #e4afaf;
   border-radius: 8px;
+  background-color: white;
 }
 
 /* 텍스트 영역 */
@@ -142,33 +155,32 @@
 }
 
 .tag.active {
-  background-color: #ffcc66;
   color: #333;
   font-weight: 500;
 }
 
 /* 추천 문장 */
-.suggest-section-recommend-list button{
- width: 100%;
- text-align: left;
+.suggest-section-recommend-list button {
+  width: 100%;
+  text-align: left;
 }
-.suggest-section-recommend-title{
+.suggest-section-recommend-title {
   font-weight: 600;
   margin-bottom: 10px;
 }
 /* 이전에 작성한 문장 목록 */
-.suggest-section-last{
+.suggest-section-last {
   margin-top: 40px;
 }
-.suggest-section-last-title{
+.suggest-section-last-title {
   font-weight: 600;
   margin-bottom: 10px;
 }
 
-.suggest-section-last-item-wrapper{
+.suggest-section-last-item-wrapper {
   display: flex;
 }
-.suggest-section-last-item-wrapper button:hover{
+.suggest-section-last-item-wrapper button:hover {
   color: #bbb;
 }
 

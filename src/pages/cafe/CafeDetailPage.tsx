@@ -3,7 +3,6 @@ import { useEffect, useState, useRef } from "react";
 import BottomNav from "../../components/BottomNav";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { API_BASE_URL } from "../../config/api";
 import "./CafeDetail.css";
 
 interface Menu {
@@ -48,7 +47,6 @@ export default function CafeDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const mapRef = useRef<HTMLDivElement>(null);
-  const mapInstanceRef = useRef<any>(null); // 지도 인스턴스 저장
 
   const [cafe, setCafe] = useState<CafeDetail | null>(null);
   const [currentImage, setCurrentImage] = useState(0);
