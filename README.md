@@ -1,4 +1,3 @@
-# 🌿 StudySpot Frontend
 
 ## 📘 프로젝트 개요
 
@@ -21,13 +20,16 @@
 
 ## 🖼 주요 화면
 
-| 홈 화면 | AI 검색형 | 선택형 검색 |
+| 홈 화면 | 문자 추출형 | 선택형 검색 |
 |--------|-----------|-------------|
-| <img width="250" src="https://github.com/user-attachments/assets/44e6123c-8ca3-48da-9891-0ee017300ccf" /> | <img width="256" src="https://github.com/user-attachments/assets/32d1e1b8-912c-4c57-90ac-6ec6edc01fcb" /> | <img width="253" src="https://github.com/user-attachments/assets/a2b132ad-b3cf-4008-91e9-f326b7cec516" /> |
+| <img width="200" alt="image" src="https://github.com/user-attachments/assets/805a7d01-10cc-4e9d-b3df-3caab04af9e5" /> | <img width="200" alt="image" src="https://github.com/user-attachments/assets/31e72359-7bbe-4a6c-913e-b785ace30529" /> | <img width="200" alt="image" src="https://github.com/user-attachments/assets/6527853b-88e9-4e1b-856f-7e047676592a" />
+ |
 
-| 카페 상세 | 메뉴 상세 |
-|-----------|-----------|
-| <img width="204" src="https://github.com/user-attachments/assets/e202156a-dfb2-48e6-ad74-4b564a4f805e" /> | <img width="288" src="https://github.com/user-attachments/assets/e5670360-5ffd-4845-8629-b12e7b87a78e" /> |
+| 카페 상세 |  | 메뉴 상세 |
+|-----------|-----------|-----------|
+|<img width="200" alt="image" src="https://github.com/user-attachments/assets/40e1928e-31b7-4d30-8147-913616f49937" />|<img width="200" height="980" alt="image" src="https://github.com/user-attachments/assets/68a7c3c1-6da7-4f45-9633-fcae5bd2601f" /> |<img width="200"  alt="image" src="https://github.com/user-attachments/assets/ccaaed40-8ba2-4938-9e26-2bff6959cd02" />
+
+ |
 
 
 ---
