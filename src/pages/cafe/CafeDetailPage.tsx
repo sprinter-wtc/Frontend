@@ -103,8 +103,8 @@ export default function CafeDetailPage() {
 
   return (
     <div className="cafe-detail-page">
-      <button className="back-btn" onClick={() => navigate(-1)}>
-        ← 뒤로가기
+      <button type="button" onClick={() => navigate(-1)}>
+        <span className="material-symbols-outlined">arrow_back_ios</span>
       </button>
 
       <div className="slider">
@@ -176,13 +176,13 @@ export default function CafeDetailPage() {
       {bestReview && (
         <div className="best-review-block">
           <div className="best-review-header">
-            <h3>🔥 BEST 리뷰</h3>
-            <button
-              className="view-all-btn"
+            <h3 className="best-review-title">🔥 BEST 리뷰</h3>
+            <p className="see-all-reviews"
               onClick={() => navigate(`/reviews/${id}`)} // 전체 리뷰 페이지로 이동
             >
-              전체 리뷰 보기
-            </button>
+              {" "}
+              더보기{" "}
+            </p>
           </div>
 
           {bestReview.map((r: Review, i: number) => (
@@ -192,10 +192,10 @@ export default function CafeDetailPage() {
               )}
               <div className="review-content">
                 <div>
-                  <b>{r.name}</b>  ⭐ {r.starRating}
+                  <b>{r.name}</b> ⭐ {r.starRating}
                 </div>
                 <div>
-                <hr></hr>
+                  <hr></hr>
                   <p>{r.content}</p>
                 </div>
               </div>
