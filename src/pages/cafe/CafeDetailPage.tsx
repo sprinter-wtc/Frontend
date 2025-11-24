@@ -1,6 +1,4 @@
-// src/pages/search/cafe/CafeDetailPage.tsx
-
-import { CafeBase } from "./cafecard/CafeBase"; // CafeBase 인터페이스 가져오기
+import { CafeBase } from "./cafecard/CafeBase";
 import { useEffect, useState, useRef } from "react";
 import BottomNav from "../../components/BottomNav";
 import { useParams, useNavigate } from "react-router-dom";
@@ -8,85 +6,59 @@ import axios from "axios";
 import { API_BASE_URL } from "../../config/api";
 import "./CafeDetail.css";
 
-// ----------------------
-// TypeScript 타입 정의
-// ----------------------
 interface Menu {
   name: string;
   price: number;
   description: string;
   imageUrl: string;
 }
-
 interface ImageData {
   imageUrl: string;
   index: number;
 }
-
-interface Tags {
-  petFriendly: boolean;
-  power_outlet_level: string;
-}
-
-// 운영 정보 포함 CafeDetail 타입
 export interface CafeDetail extends CafeBase {
-  purpose: string[];          // 목적 태그
-  limitTime: number;          // 시간 제한
-  phoneNumber: string;        // 전화번호
-  tags: {
-    petFriendly: boolean;     // 반려견 동반 가능 여부
-    power_outlet_level: string; // 콘센트 수준
-  };
-  menuList: Menu[];           // 메뉴 리스트
-  imageList: ImageData[];     // 이미지 리스트
-  location: number[];         // [lng, lat]
+  purpose: string[];
+  limitTime: number;
+  phoneNumber: string;
+  tags: { petFriendly: boolean; power_outlet_level: string };
+  menuList: Menu[];
+  imageList: ImageData[];
+  location: number[];
 }
 
-// 리뷰 타입
 interface Review {
   starRating: number;
-  name: string;
+  name?: string | null;
   content: string;
   imageUrl?: string | null;
+  createdAt?: string | number;
 }
 
-interface CafeReviews {
-  averageStarRating?: number; // 평균 별점
-  reviewCount?: number;       // 리뷰 개수
-  reviews?: Review[];
-}
+const BASE_IMAGE_URL = "https://tmp.studyspot.kr";
+const getFullImageUrl = (url?: string | null) =>
+  url ? (url.startsWith("http") ? url : `${BASE_IMAGE_URL}${url}`) : "";
 
-// ----------------------
-// 글로벌 window 타입 선언 필요 (naver 지도)
-// ----------------------
 declare global {
   interface Window {
-    naver: any; // naver.maps 타입 정의 가능, 일단 any로
+    naver: any;
   }
 }
 
-// ----------------------
-// 컴포넌트 시작
-// ----------------------
 export default function CafeDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any>(null); // 지도 인스턴스 저장
 
-  // 상태 관리
   const [cafe, setCafe] = useState<CafeDetail | null>(null);
-  const [reviews, setReviews] = useState<CafeReviews | null>(null);
   const [currentImage, setCurrentImage] = useState(0);
+  const [bestReview, setBestReview] = useState<Review[]>([]);
 
-  // ----------------------
-  // 카페 상세 정보 불러오기
-  // ----------------------
   useEffect(() => {
     const fetchCafe = async () => {
       try {
         const res = await axios.get<{ data: CafeDetail }>(
-          `${API_BASE_URL}/cafes/details/${id}`
+          `https://studyspot.kr/api/cafes/details/${id}`
         );
         setCafe(res.data.data);
       } catch (err) {
@@ -96,99 +68,48 @@ export default function CafeDetailPage() {
     fetchCafe();
   }, [id]);
 
-  // ----------------------
-  // 리뷰 불러오기
-  // ----------------------
+  // 베스트 리뷰만 불러오기
   useEffect(() => {
-    const fetchReviews = async () => {
+    const fetchBestReview = async () => {
       try {
-        const res = await axios.get<{ data: CafeReviews }>(
-          `${API_BASE_URL}/cafes/reviews/best/${id}`
+        const res = await axios.get<{ data: { reviews: Review[] } }>(
+          `https://studyspot.kr/api/reviews/best/${id}`
         );
-        setReviews(res.data.data);
+        setBestReview(res.data.data?.reviews ?? []);
       } catch (err) {
-        console.error("❌ 리뷰 정보를 불러올 수 없습니다:", err);
+        console.error("❌ 베스트 리뷰를 불러올 수 없습니다:", err);
       }
     };
-    fetchReviews();
+    fetchBestReview();
   }, [id]);
 
-  // ----------------------
-  // 네이버 지도 초기화
-  // ----------------------
+  // 네이버 지도
   useEffect(() => {
-    if (!cafe || !mapRef.current) return;
-
-    // location 데이터 검증
-    if (!Array.isArray(cafe.location) || cafe.location.length < 2) {
-      console.error("❌ 위치 정보가 올바르지 않습니다:", cafe.location);
-      return;
-    }
-
-    // 이미 지도가 초기화되어 있으면 제거
-    if (mapInstanceRef.current) {
-      mapInstanceRef.current = null;
-    }
-
-    // 네이버 맵 API가 로드될 때까지 대기 (최대 50회 시도 = 5초)
-    let retryCount = 0;
-    const maxRetries = 50;
-
-    const initMap = () => {
-      if (!window.naver?.maps) {
-        retryCount++;
-        if (retryCount < maxRetries) {
-          // 네이버 맵이 아직 로드되지 않았으면 100ms 후 다시 시도
-          setTimeout(initMap, 100);
-        } else {
-          console.error("❌ 네이버 맵 API를 로드할 수 없습니다.");
-        }
-        return;
-      }
-
-      try {
-        // 지도 생성
-        const map = new window.naver.maps.Map(mapRef.current!, {
-          center: new window.naver.maps.LatLng(cafe.location[1], cafe.location[0]),
-          zoom: 15,
-        });
-
-        // 마커 추가
-        new window.naver.maps.Marker({
-          position: new window.naver.maps.LatLng(cafe.location[1], cafe.location[0]),
-          map,
-        });
-
-        // 지도 인스턴스 저장
-        mapInstanceRef.current = map;
-      } catch (error) {
-        console.error("❌ 지도를 초기화할 수 없습니다:", error);
-      }
-    };
-
-    initMap();
-
-    // cleanup: 컴포넌트 언마운트 시 지도 제거
-    return () => {
-      if (mapInstanceRef.current) {
-        mapInstanceRef.current = null;
-      }
-    };
+    if (!cafe || !mapRef.current || !window.naver?.maps) return;
+    const map = new window.naver.maps.Map(mapRef.current, {
+      center: new window.naver.maps.LatLng(cafe.location[1], cafe.location[0]),
+      zoom: 15,
+    });
+    new window.naver.maps.Marker({
+      position: new window.naver.maps.LatLng(
+        cafe.location[1],
+        cafe.location[0]
+      ),
+      map,
+    });
   }, [cafe]);
 
   if (!cafe) return <div className="loading">불러오는 중...</div>;
 
   return (
     <div className="cafe-detail-page">
-      {/* 뒤로가기 */}
       <button className="back-btn" onClick={() => navigate(-1)}>
         ← 뒤로가기
       </button>
 
-      {/* 이미지 슬라이더 */}
       <div className="slider">
         <img
-          src={cafe.imageList[currentImage]?.imageUrl}
+          src={getFullImageUrl(cafe.imageList[currentImage]?.imageUrl)}
           alt="카페 이미지"
           className="slider-img"
         />
@@ -214,20 +135,17 @@ export default function CafeDetailPage() {
         </button>
       </div>
 
-      {/* 카페 이름 & 카테고리 */}
       <h1 className="cafe-title">{cafe.name}</h1>
       <p className="category">{cafe.category}</p>
 
-      {/* 목적 태그 */}
       <div className="tag-section">
-        {cafe.purpose.map((p: string, i: number) => (
+        {cafe.purpose.map((p, i) => (
           <span key={i} className="tag-blue">
             #{p}
           </span>
         ))}
       </div>
 
-      {/* 카페 정보 */}
       <h2 className="section-title">카페 정보</h2>
       <ul className="info-list">
         <li>⏱ 시간 제한: {cafe.limitTime}시간</li>
@@ -236,12 +154,15 @@ export default function CafeDetailPage() {
         <li>🐶 반려견 동반: {cafe.tags.petFriendly ? "가능" : "불가"}</li>
       </ul>
 
-      {/* 메뉴 리스트 */}
       <h2 className="section-title">메뉴 & 가격</h2>
       <div className="menu-grid">
-        {cafe.menuList.map((m: Menu, i: number) => (
+        {cafe.menuList.map((m, i) => (
           <div key={i} className="menu-card">
-            <img src={m.imageUrl} alt={m.name} className="menu-img" />
+            <img
+              src={getFullImageUrl(m.imageUrl)}
+              alt={m.name}
+              className="menu-img"
+            />
             <h3 className="menu-title">{m.name}</h3>
             <p className="menu-desc">{m.description}</p>
             <p className="menu-price">{m.price}원</p>
@@ -249,37 +170,44 @@ export default function CafeDetailPage() {
         ))}
       </div>
 
-      {/* 평가 & 리뷰 */}
-      <div className="reviews-section">
-        <h2 className="section-title">평가 & 리뷰</h2>
+      {/* 베스트 리뷰 + 전체 리뷰 페이지 이동 버튼 */}
 
-        <div className="rating-section">
-          <div className="avg-rating">
-            {/* undefined 체크 + 기본값 0.0 */}
-            {(reviews?.averageStarRating ?? 0).toFixed(1)} ⭐
+      {/* ⭐️ 베스트 리뷰 표시 */}
+      {bestReview && (
+        <div className="best-review-block">
+          <div className="best-review-header">
+            <h3>🔥 BEST 리뷰</h3>
+            <button
+              className="view-all-btn"
+              onClick={() => navigate(`/reviews/${id}`)} // 전체 리뷰 페이지로 이동
+            >
+              전체 리뷰 보기
+            </button>
           </div>
-          <div className="review-count">
-            ({reviews?.reviewCount ?? 0}개 리뷰)
-          </div>
-        </div>
 
-        <div className="review-list">
-          {reviews?.reviews?.map((r: Review, i: number) => (
-            <div key={i} className="review-card">
-              <b>{r.name}</b> ⭐ {r.starRating}
-              <p>{r.content}</p>
-              {r.imageUrl && <img src={r.imageUrl} alt="리뷰 이미지" />}
+          {bestReview.map((r: Review, i: number) => (
+            <div key={i} className="review-card best">
+              {r.imageUrl && (
+                <img src={getFullImageUrl(r.imageUrl)} alt="리뷰 이미지" />
+              )}
+              <div className="review-content">
+                <div>
+                  <b>{r.name}</b>  ⭐ {r.starRating}
+                </div>
+                <div>
+                <hr></hr>
+                  <p>{r.content}</p>
+                </div>
+              </div>
             </div>
           ))}
         </div>
-      </div>
+      )}
 
-      {/* 지도 */}
       <h2 className="section-title">위치</h2>
       <div ref={mapRef} className="naver-map"></div>
 
-       <BottomNav />
+      <BottomNav />
     </div>
-
   );
 }

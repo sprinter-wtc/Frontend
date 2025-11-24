@@ -68,10 +68,10 @@ const RECOMMENDED_SENTENCES = [
   "🚶‍♂️ 산책 후 들르기 좋은 카페 알려줘",
 ];
 
-
 // -----------------------------
-const RECOMMENDED_URL = `${API_BASE_URL}/cafes/recommended`;
-const CAFE_DETAIL_URL = `${API_BASE_URL}/cafes/details`;
+const MOCK_SERVER = "https://studyspot.kr/api";
+const RECOMMENDED_URL = `${MOCK_SERVER}/cafes/recommended`;
+const CAFE_DETAIL_URL = `${MOCK_SERVER}/cafes/details`;
 const DEBOUNCE_DELAY = 400;
 
 // -----------------------------

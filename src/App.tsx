@@ -5,6 +5,8 @@ import Home from "./pages/Home"; // 홈 페이지
 import CafeDetailPage from "./pages/cafe/CafeDetailPage";
 import StudySpotRec from "./pages/recommend/StudySpotRec";
 
+
+
 function App() {
   return (
     <Router>

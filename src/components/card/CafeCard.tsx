@@ -5,15 +5,16 @@ import "./CafeCard.css";
 export interface CafeCardData {
   id: number;
   name: string;
-  category?: string;
-  purpose?: string[];
-  imageList?: { imageUrl: string; index: number }[];
+  category: string;
+  purpose: string[];
+  imageList: { imageUrl: string; index: number }[];
   location?: string[];
   rating?: number;
   startingTime?: string;
   closingTime?: string;
   tags?: string[];
 }
+const IMAGE_BASE_URL = "https://studyspot.kr";
 
 interface CafeCardProps {
   cafe: CafeCardData;
@@ -23,6 +24,7 @@ const CafeCard: React.FC<CafeCardProps> = ({ cafe }) => {
   const navigate = useNavigate();
   const fallbackImage = "/images/default_cafe.png";
 
+  // 영업 상태 계산
   const checkOpenStatus = (start?: string, end?: string) => {
     if (!start || !end) return "NO_INFO";
 
@@ -44,12 +46,7 @@ const CafeCard: React.FC<CafeCardProps> = ({ cafe }) => {
   };
 
   const openStatus = checkOpenStatus(cafe.startingTime, cafe.closingTime);
-  // 이미지 로드 실패 방지
-  const handleImgError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-    if (e.currentTarget.src !== fallbackImage) {
-      e.currentTarget.src = fallbackImage;
-    }
-  };
+
   return (
     <div
       className="cafe-card cursor-pointer"
@@ -58,7 +55,11 @@ const CafeCard: React.FC<CafeCardProps> = ({ cafe }) => {
       <div className="cafe-card-div">
         <div className="cafe-card-img">
           {/* <img
-            src={cafe.imageList?.[0]?.imageUrl || fallbackImage}
+            src={
+              cafe.imageList?.[0]?.imageUrl
+                ? `${IMAGE_BASE_URL}${cafe.imageList[0].imageUrl}`
+                : fallbackImage
+            }
             alt={cafe.name}
             className="cafe-thumbnail"
             onError={(e) => {
@@ -72,10 +73,12 @@ const CafeCard: React.FC<CafeCardProps> = ({ cafe }) => {
         <div className="cafe-info">
           <div className="cafe-info-title">
             <h3>{cafe.name}</h3>
-            <p className="cafe-rating">⭐ {cafe.rating}</p>
+            <p className="cafe-rating">⭐ {cafe.rating ?? "N/A"}</p>
           </div>
 
-          <p className="cafe-meta">📍 {cafe.location?.join(", ")}</p>
+          <p className="cafe-meta">
+            📍 {cafe.location?.length ? cafe.location.join(", ") : "정보없음"}
+          </p>
 
           <div className={`open-status-badge ${openStatus}`}>
             {openStatus === "OPEN"
@@ -86,7 +89,7 @@ const CafeCard: React.FC<CafeCardProps> = ({ cafe }) => {
           </div>
 
           <div className="cafe-card-tag-list">
-            {cafe.purpose?.map((tag) => (
+            {(cafe.purpose?.length ? cafe.purpose : cafe.tags)?.map((tag) => (
               <span key={tag} className="cafe-card-tag">
                 {tag}
               </span>

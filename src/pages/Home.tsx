@@ -9,30 +9,30 @@ import { API_BASE_URL } from "../config/api";
 interface Category {
   id: number;
   name: string;
-  imgUrl?: string;
+  emoji?: string;
 }
 interface Purpose {
   id: number;
   name: string;
-  imgUrl?: string;
+  emoji?: string;
 }
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
 
   const [categories, setCategories] = useState<Category[]>([
-    { id: 1, name: "스터디카페", imgUrl: "https://placehold.co/80x80" },
-    { id: 2, name: "대형카페", imgUrl: "https://placehold.co/80x80" },
-    { id: 3, name: "조용한 카페", imgUrl: "https://placehold.co/80x80" },
+    { id: 1, name: "스터디카페", emoji: "📚" },
+    { id: 2, name: "대형카페", emoji: "☕️" },
+    { id: 3, name: "조용한 카페", emoji: "🤫" },
   ]);
 
   const [purposes, setPurposes] = useState<Purpose[]>([
-    { id: 1, name: "책", imgUrl: "https://placehold.co/80x80" },
-    { id: 2, name: "노트북", imgUrl: "https://placehold.co/80x80" },
-    { id: 3, name: "데이트", imgUrl: "https://placehold.co/80x80" },
-    { id: 4, name: "휴식", imgUrl: "https://placehold.co/80x80" },
-    { id: 5, name: "포토스팟", imgUrl: "https://placehold.co/80x80" },
-    { id: 6, name: "단체", imgUrl: "https://placehold.co/80x80" },
+    { id: 1, name: "책", emoji: "📖" },
+    { id: 2, name: "노트북", emoji: "💻" },
+    { id: 3, name: "데이트", emoji: "💘" },
+    { id: 4, name: "휴식", emoji: "😌" },
+    { id: 5, name: "포토스팟", emoji: "📸" },
+    { id: 6, name: "단체", emoji: "👥" },
   ]);
 
   const [recommendedCafes, setRecommendedCafes] = useState<CafeCardData[]>([]);
@@ -45,7 +45,7 @@ const Home: React.FC = () => {
     const fetchRecommendedCafes = async () => {
       try {
         const res = await fetch(
-          `${API_BASE_URL}/cafes/recommended`
+          "https://studyspot.kr/api/cafes/recommended"
         );
         const json = await res.json();
         console.log("카페추천데이터:", json.data); // 확인용
@@ -82,7 +82,7 @@ const Home: React.FC = () => {
           <div className="category-grid">
             {categories.map((cat) => (
               <div key={cat.id} className="category-item">
-                <img src={cat.imgUrl} alt={cat.name} />
+                <span className="emoji">{cat.emoji}</span>
                 <span>{cat.name}</span>
               </div>
             ))}
@@ -95,7 +95,7 @@ const Home: React.FC = () => {
           <div className="purpose-grid">
             {purposes.map((p) => (
               <div key={p.id} className="purpose-item">
-                <img src={p.imgUrl} alt={p.name} />
+                <span className="emoji">{p.emoji}</span>
                 <span>{p.name}</span>
               </div>
             ))}
