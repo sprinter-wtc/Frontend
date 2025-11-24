@@ -77,7 +77,6 @@ export default function CafeReviewsPage() {
         ))}
       </div>
 
-      <BottomNav />
     </div>
   );
 }
