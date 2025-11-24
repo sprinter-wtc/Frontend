@@ -1,0 +1,75 @@
+/* 전체 리뷰 카드 */
+.review-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.review-card {
+  border: 1px solid #eee;
+  background-color: #fafafa;
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.review-card img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.review-content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.review-content p {
+  margin: 0;
+  font-size: 13px;
+  color: #333;
+}
+
+.review-content small {
+  font-size: 11px;
+  color: #999;
+}
+/* CafeDetail.css 추가 부분 */
+
+.review-card.horizontal {
+  display: flex;
+  gap: 12px;
+  border: 1px solid #eee;
+  padding: 12px;
+  border-radius: 8px;
+  background-color: #fafafa;
+  align-items: flex-start;
+}
+
+.review-card.horizontal .review-img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.review-card.horizontal .review-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
