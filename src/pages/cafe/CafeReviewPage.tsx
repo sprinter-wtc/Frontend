@@ -26,34 +26,32 @@ export default function CafeReviewsPage() {
   const navigate = useNavigate();
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
-useEffect(() => {
-  if (!cafeId) return;
+  useEffect(() => {
+    if (!cafeId) return;
 
-  const fetchReviews = async () => {
-    try {
-      const res = await axios.get<Review[]>(
-        `https://studyspot.kr/api/reviews/${cafeId}`
-      );
-      console.log("전체 리뷰 API 응답:", res.data); // 배열 확인
-      setReviews(res.data ?? []);
-    } catch (err) {
-      console.error("❌ 전체 리뷰를 불러올 수 없습니다:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+    const fetchReviews = async () => {
+      try {
+        const res = await axios.get<Review[]>(
+          `https://studyspot.kr/api/reviews/${cafeId}`
+        );
+        console.log("전체 리뷰 API 응답:", res.data); // 배열 확인
+        setReviews(res.data ?? []);
+      } catch (err) {
+        console.error("❌ 전체 리뷰를 불러올 수 없습니다:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  fetchReviews();
-}, [cafeId]);
-
-
+    fetchReviews();
+  }, [cafeId]);
 
   if (loading) return <div className="loading">불러오는 중...</div>;
 
   return (
     <div className="cafe-detail-page">
-      <button className="back-btn" onClick={() => navigate(-1)}>
-        ← 뒤로가기
+      <button type="button" onClick={() => navigate(-1)}>
+        <span className="material-symbols-outlined">arrow_back_ios</span>
       </button>
 
       <h2 className="section-title">전체 리뷰</h2>
