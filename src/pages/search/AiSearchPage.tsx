@@ -9,6 +9,7 @@ import {
   normalizeCafe,
   CafeCardData,
 } from "../../components/utils/normalizeCafe";
+import { API_BASE_URL } from "../../config/api";
 
 // -----------------------------
 // 타입 정의
@@ -69,9 +70,8 @@ const RECOMMENDED_SENTENCES = [
 
 
 // -----------------------------
-const MOCK_SERVER = "https://test.studyspot.kr/api";
-const RECOMMENDED_URL = `${MOCK_SERVER}/cafes/recommended`;
-const CAFE_DETAIL_URL = `${MOCK_SERVER}/cafes/details`;
+const RECOMMENDED_URL = `${API_BASE_URL}/cafes/recommended`;
+const CAFE_DETAIL_URL = `${API_BASE_URL}/cafes/details`;
 const DEBOUNCE_DELAY = 400;
 
 // -----------------------------

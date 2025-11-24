@@ -9,6 +9,7 @@ import {
   normalizeCafe,
   CafeCardData,
 } from "../../components/utils/normalizeCafe";
+import { API_BASE_URL } from "../../config/api";
 
 const TAG_MAP: { [key: string]: string[] } = {
   "☕️ 공간종류": ["카페", "스터디카페", "독서실"],
@@ -105,14 +106,14 @@ const TagSearchPage: React.FC = () => {
       const listRes = await axios.get<{
         data: { id: number }[];
       }>(
-        "https://test.studyspot.kr/api/cafes/recommended"
+        `${API_BASE_URL}/cafes/recommended`
       );
       const cafeList = listRes.data.data || [];
       const cafeIds = cafeList.map((cafe) => cafe.id);
 
       const requests = cafeIds.map((id) =>
         axios.get<{ data: Cafe }>(
-          `https://test.studyspot.kr/api/cafes/details/${id}`
+          `${API_BASE_URL}/cafes/details/${id}`
         )
       );
       const responses = await Promise.all(requests);

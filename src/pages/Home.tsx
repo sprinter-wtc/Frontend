@@ -4,6 +4,7 @@ import "../styles/Home.css";
 import BottomNav from "../components/BottomNav";
 import CafeCard, { CafeCardData } from "../components/cafe/CafeCard";
 import { normalizeCafe } from "../components/utils/normalizeCafe";
+import { API_BASE_URL } from "../config/api";
 
 interface Category {
   id: number;
@@ -44,7 +45,7 @@ const Home: React.FC = () => {
     const fetchRecommendedCafes = async () => {
       try {
         const res = await fetch(
-          "https://test.studyspot.kr/api/cafes/recommended"
+          `${API_BASE_URL}/cafes/recommended`
         );
         const json = await res.json();
         console.log("카페추천데이터:", json.data); // 확인용

@@ -5,6 +5,7 @@ import { useEffect, useState, useRef } from "react";
 import BottomNav from "../../components/BottomNav";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API_BASE_URL } from "../../config/api";
 import "./CafeDetail.css";
 
 // ----------------------
@@ -71,6 +72,7 @@ export default function CafeDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const mapRef = useRef<HTMLDivElement>(null);
+  const mapInstanceRef = useRef<any>(null); // 지도 인스턴스 저장
 
   // 상태 관리
   const [cafe, setCafe] = useState<CafeDetail | null>(null);
@@ -84,7 +86,7 @@ export default function CafeDetailPage() {
     const fetchCafe = async () => {
       try {
         const res = await axios.get<{ data: CafeDetail }>(
-          `https://test.studyspot.kr/api/cafes/details/${id}`
+          `${API_BASE_URL}/cafes/details/${id}`
         );
         setCafe(res.data.data);
       } catch (err) {
@@ -101,7 +103,7 @@ export default function CafeDetailPage() {
     const fetchReviews = async () => {
       try {
         const res = await axios.get<{ data: CafeReviews }>(
-          `https://test.studyspot.kr/api/cafes/reviews/best/${id}`
+          `${API_BASE_URL}/cafes/reviews/best/${id}`
         );
         setReviews(res.data.data);
       } catch (err) {
@@ -115,17 +117,63 @@ export default function CafeDetailPage() {
   // 네이버 지도 초기화
   // ----------------------
   useEffect(() => {
-    if (!cafe || !mapRef.current || !window.naver?.maps) return;
+    if (!cafe || !mapRef.current) return;
 
-    const map = new window.naver.maps.Map(mapRef.current, {
-      center: new window.naver.maps.LatLng(cafe.location[1], cafe.location[0]),
-      zoom: 15,
-    });
+    // location 데이터 검증
+    if (!Array.isArray(cafe.location) || cafe.location.length < 2) {
+      console.error("❌ 위치 정보가 올바르지 않습니다:", cafe.location);
+      return;
+    }
 
-    new window.naver.maps.Marker({
-      position: new window.naver.maps.LatLng(cafe.location[1], cafe.location[0]),
-      map,
-    });
+    // 이미 지도가 초기화되어 있으면 제거
+    if (mapInstanceRef.current) {
+      mapInstanceRef.current = null;
+    }
+
+    // 네이버 맵 API가 로드될 때까지 대기 (최대 50회 시도 = 5초)
+    let retryCount = 0;
+    const maxRetries = 50;
+
+    const initMap = () => {
+      if (!window.naver?.maps) {
+        retryCount++;
+        if (retryCount < maxRetries) {
+          // 네이버 맵이 아직 로드되지 않았으면 100ms 후 다시 시도
+          setTimeout(initMap, 100);
+        } else {
+          console.error("❌ 네이버 맵 API를 로드할 수 없습니다.");
+        }
+        return;
+      }
+
+      try {
+        // 지도 생성
+        const map = new window.naver.maps.Map(mapRef.current!, {
+          center: new window.naver.maps.LatLng(cafe.location[1], cafe.location[0]),
+          zoom: 15,
+        });
+
+        // 마커 추가
+        new window.naver.maps.Marker({
+          position: new window.naver.maps.LatLng(cafe.location[1], cafe.location[0]),
+          map,
+        });
+
+        // 지도 인스턴스 저장
+        mapInstanceRef.current = map;
+      } catch (error) {
+        console.error("❌ 지도를 초기화할 수 없습니다:", error);
+      }
+    };
+
+    initMap();
+
+    // cleanup: 컴포넌트 언마운트 시 지도 제거
+    return () => {
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current = null;
+      }
+    };
   }, [cafe]);
 
   if (!cafe) return <div className="loading">불러오는 중...</div>;

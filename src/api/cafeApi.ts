@@ -1,7 +1,8 @@
 // src/api/cafeApi.ts
 import axios from "axios";
 
-const BASE_URL = "https://test.studyspot.kr/api";
+// 환경 변수에서 API Base URL 가져오기 (없으면 기본값 사용)
+const BASE_URL = process.env.REACT_APP_API_BASE_URL || "https://test.studyspot.kr/api";
 // ----------------------
 // 타입 정의
 // ----------------------

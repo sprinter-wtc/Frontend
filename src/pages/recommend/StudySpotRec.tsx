@@ -7,6 +7,7 @@ import {
   normalizeCafe,
   CafeCardData,
 } from "../../components/utils/normalizeCafe";
+import { API_BASE_URL } from "../../config/api";
 
 const StudySpotRec: React.FC = () => {
   const navigate = useNavigate();
@@ -59,8 +60,8 @@ const StudySpotRec: React.FC = () => {
       try {
         // 태그가 있을 경우 -> 태그 기반 검색 API 사용
         const apiUrl = selectedTag
-          ? `https://test.studyspot.kr/api/cafes?tags=${selectedTag}`
-          : `https://test.studyspot.kr/api/cafes/recommended`;
+          ? `${API_BASE_URL}/cafes?tags=${selectedTag}`
+          : `${API_BASE_URL}/cafes/recommended`;
 
         const res = await fetch(apiUrl);
         const json = await res.json();
