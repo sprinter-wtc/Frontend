@@ -8,23 +8,33 @@ import {
   CafeCardData,
 } from "../../components/utils/normalizeCafe";
 
+interface Tag {
+  id: number;
+  name: string;
+  emoji: string;
+  type: "category" | "purpose";
+}
+
+interface Category {
+  id: number;
+  name: string;
+  emoji: string;
+}
+
+interface Purpose {
+  id: number;
+  name: string;
+  emoji: string;
+}
+
 const StudySpotRec: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  interface Tag {
-    id: number;
-    name: string;
-    emoji: string;
-    type: "category" | "purpose";
-  }
-
-  const initialTag = location.state?.filterTag || null;
-
-  const [tags, setTags] = useState<Tag[]>([
-    { id: 1, name: "스터디카페", emoji: "📚", type: "category" },
-    { id: 2, name: "대형카페", emoji: "☕️", type: "category" },
-    { id: 3, name: "조용한 카페", emoji: "🤫", type: "category" },
+  const [tags] = useState<Tag[]>([
+    { id: 1, name: "카페", emoji: "☕️", type: "category" },
+    { id: 2, name: "스터디카페", emoji: "✏️", type: "category" },
+    { id: 3, name: "독서실", emoji: "🪑", type: "category" },
     { id: 4, name: "책", emoji: "📖", type: "purpose" },
     { id: 5, name: "노트북", emoji: "💻", type: "purpose" },
     { id: 6, name: "데이트", emoji: "💘", type: "purpose" },
@@ -33,26 +43,71 @@ const StudySpotRec: React.FC = () => {
     { id: 9, name: "단체", emoji: "👥", type: "purpose" },
   ]);
 
-  const [selectedTag, setSelectedTag] = useState<string | null>(initialTag);
+  const [selectedTag, setSelectedTag] = useState<Tag | null>(
+    location.state?.filterTag
+      ? tags.find((t) => t.name === location.state.filterTag) || null
+      : null
+  );
+
   const [recommendedCafes, setRecommendedCafes] = useState<CafeCardData[]>([]);
   const [showMore, setShowMore] = useState(false);
+
+  const [categories] = useState<Category[]>([
+    { id: 1, name: "카페", emoji: "☕️" },
+    { id: 2, name: "스터디카페", emoji: "✏️" },
+    { id: 3, name: "독서실", emoji: "🪑" },
+  ]);
+
+  const [purposes] = useState<Purpose[]>([
+    { id: 1, name: "책", emoji: "📖" },
+    { id: 2, name: "노트북", emoji: "💻" },
+    { id: 3, name: "데이트", emoji: "💘" },
+    { id: 4, name: "휴식", emoji: "😌" },
+    { id: 5, name: "포토스팟", emoji: "📸" },
+    { id: 6, name: "단체", emoji: "👥" },
+  ]);
 
   useEffect(() => {
     const fetchCafes = async () => {
       try {
-        const apiUrl = selectedTag
-          ? `https://studyspot.kr/api/cafes?tags=${selectedTag}`
-          : `https://studyspot.kr/api/cafes/recommended`;
+        let apiUrl = "https://studyspot.kr/api/cafes/recommended";
+
+        if (selectedTag) {
+          if (selectedTag.type === "category") {
+            apiUrl = `https://studyspot.kr/api/cafes?category=${selectedTag.name}`;
+          } else if (selectedTag.type === "purpose") {
+            apiUrl = `https://studyspot.kr/api/cafes?purpose=${selectedTag.name}`;
+          }
+        }
 
         const res = await fetch(apiUrl);
         const json = await res.json();
 
-        if (json.status === "success") {
-          const normalized = json.data.map(normalizeCafe);
+        if (json.status === "success" && Array.isArray(json.data.cafes)) {
+          const normalized: CafeCardData[] = json.data.cafes.map(
+            (cafe: any) => ({
+              id: cafe.id,
+              name: cafe.name,
+              category: cafe.category,
+              purpose: [],
+              imageList: cafe.imageUrl
+                ? [{ imageUrl: cafe.imageUrl, index: 0 }]
+                : [],
+              location: cafe.address ? [cafe.address] : [],
+              rating: cafe.averageStarRating,
+              startingTime: cafe.startingTime,
+              closingTime: cafe.closingTime,
+              tags: cafe.tags || [],
+            })
+          );
+
           setRecommendedCafes(normalized);
+        } else {
+          setRecommendedCafes([]);
         }
       } catch (err) {
         console.error("[ERROR] 카페 불러오기 실패:", err);
+        setRecommendedCafes([]);
       }
     };
 
@@ -61,49 +116,58 @@ const StudySpotRec: React.FC = () => {
 
   return (
     <div className="studyspotrec-container">
-      <div>
-        {/* 헤더 */}
-        <div className="header-back">
-          <button type="button" onClick={() => navigate(-1)}>
-            <span className="material-symbols-outlined">arrow_back_ios</span>
-          </button>
-          <div className="header-back-title">&nbsp; 장소추천</div>
-        </div>
-
-        {/* 상단 태그 + 더보기 버튼 */}
-        <div className="studyspotrec-top-select">
-          {/* 더보기 버튼: studyspotrec-top-select 내부 오른쪽 상단 */}
-          <div className="dropdown-btn-outside">
-            <button
-              className="dropdown-btn"
-              onClick={() => setShowMore(!showMore)}
-            >
-              {showMore ? "▲" : "▼"}
-            </button>
-          </div>
-
-          {/* 태그 영역 */}
-          {showMore ? (
-            <div className="hidden-tags-grid">
-              {tags.map((tag) => (
-                <div key={tag.id} className="tag-item">
-                  <span className="emoji">{tag.emoji}</span>
-                  <span>{tag.name}</span>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="tag-scroll-wrapper">
-              {tags.map((tag) => (
-                <div key={tag.id} className="tag-item">
-                  <span className="emoji">{tag.emoji}</span>
-                  <span>{tag.name}</span>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+      {/* 헤더 */}
+      <div className="header-back">
+          <span className="material-symbols-outlined" onClick={() => navigate(-1)}>arrow_back_ios</span>
+        <div className="header-back-title">&nbsp; 장소추천</div>
       </div>
+
+      {/* 상단 태그 + 더보기 버튼 */}
+      <div className="studyspotrec-top-select">
+        {/* 더보기 버튼 */}
+        <div className="dropdown-btn-outside">
+          <button
+            className="dropdown-btn"
+            onClick={() => setShowMore(!showMore)}
+          >
+            {showMore ? "▲" : "▼"}
+          </button>
+        </div>
+
+        {/* 태그 영역 */}
+        {showMore ? (
+          <div className="hidden-tags-grid">
+            {tags.map((tag) => (
+              <div
+                key={tag.id}
+                className={`tag-item ${
+                  selectedTag?.id === tag.id ? "selected" : ""
+                }`}
+                onClick={() => setSelectedTag(tag)}
+              >
+                <span className="emoji">{tag.emoji}</span>
+                <span>{tag.name}</span>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="tag-scroll-wrapper">
+            {tags.map((tag) => (
+              <div
+                key={tag.id}
+                className={`tag-item ${
+                  selectedTag?.id === tag.id ? "selected" : ""
+                }`}
+                onClick={() => setSelectedTag(tag)}
+              >
+                <span className="emoji">{tag.emoji}</span>
+                <span>{tag.name}</span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
       <hr />
 
       {/* 추천 카페 리스트 */}
