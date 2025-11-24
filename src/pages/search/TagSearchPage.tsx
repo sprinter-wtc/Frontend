@@ -4,7 +4,7 @@ import React, { useState, useEffect, KeyboardEvent } from "react";
 import BottomNav from "../../components/BottomNav";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import CafeCard from "../../components/cafe/CafeCard";
+import CafeCard from "../../components/card/CafeCard";
 import {
   normalizeCafe,
   CafeCardData,
@@ -159,7 +159,7 @@ const TagSearchPage: React.FC = () => {
           className={activeTab === "AI" ? "active" : ""}
           onClick={() => switchTab("AI")}
         >
-          AI 검색형
+          문자 추출형
         </button>
         <button
           className={activeTab === "CHOICE" ? "active" : ""}
