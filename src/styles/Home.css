@@ -29,6 +29,7 @@
   border-radius: 20px;
   padding: 8px 12px;
   max-width: 420px;
+  border: 1px solid #E4AFAF;
 }
 .search-bar:hover {
   cursor: grab;
@@ -66,10 +67,7 @@
   grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
   gap: 10px;
 }
-.category-grid :hover{
-  background: #FFE4D6;
- 
-}
+
 .category-item {
   display: flex;
   flex-direction: column;
@@ -88,6 +86,23 @@
   margin-bottom: 6px;
   border-radius: 8px;
 }
+/* 공부 장소 추천 마우스 오버 */
+.category-grid .category-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    background-color: var(--highlight);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* 카페 이용 목적 마우스 오버 */
+.purpose-grid .purpose-item:hover {
+    transform: scale(1.03);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+    background-color: var(--highlight);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
 
 /* 카페 이용 목적 */
 .purpose-section {
@@ -98,10 +113,7 @@
   grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
   gap: 10px;
 }
-.purpose-grid :hover{
-  background: #FFE4D6;
- 
-}
+
 .purpose-item {
   cursor: pointer;
   display: flex;

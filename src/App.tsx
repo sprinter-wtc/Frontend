@@ -4,8 +4,7 @@ import TagSearchPage from "./pages/search/TagSearchPage";
 import Home from "./pages/Home"; // 홈 페이지
 import CafeDetailPage from "./pages/cafe/CafeDetailPage";
 import StudySpotRec from "./pages/recommend/StudySpotRec";
-
-
+import CafeReviewPage from "./pages/cafe/CafeReviewPage";
 
 function App() {
   return (
@@ -19,7 +18,10 @@ function App() {
         {/* <Route path="/cafe-detail" element={<CafeDetail/>}/> */}
         <Route path="/cafe/:id" element={<CafeDetailPage />} />
         <Route path="studyspot-rec" element={<StudySpotRec/>} />
-
+        {/* /*안드로이드 WebView가 타이머 클릭 시 가로채기 위해 반드시 필요함*/  }
+        <Route path="/timer" element={<div>timer</div>} />
+        <Route path="studyspot-rec" element={<StudySpotRec />} />
+        <Route path="/reviews/:cafeId" element={<CafeReviewPage />} />
       </Routes>
     </Router>
   );
