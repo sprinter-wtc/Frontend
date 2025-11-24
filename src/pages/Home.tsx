@@ -21,9 +21,9 @@ const Home: React.FC = () => {
   const navigate = useNavigate();
 
   const [categories, setCategories] = useState<Category[]>([
-    { id: 1, name: "스터디카페", emoji: "📚" },
-    { id: 2, name: "대형카페", emoji: "☕️" },
-    { id: 3, name: "조용한 카페", emoji: "🤫" },
+    { id: 1, name: "카페", emoji: "☕️" },
+    { id: 2, name: "스터디카페", emoji: "✏️" },
+    { id: 3, name: "독서실", emoji: "🪑" },
   ]);
 
   const [purposes, setPurposes] = useState<Purpose[]>([
@@ -44,9 +44,7 @@ const Home: React.FC = () => {
   useEffect(() => {
     const fetchRecommendedCafes = async () => {
       try {
-        const res = await fetch(
-          "https://studyspot.kr/api/cafes/recommended"
-        );
+        const res = await fetch("https://studyspot.kr/api/cafes/recommended");
         const json = await res.json();
         console.log("카페추천데이터:", json.data); // 확인용
         if (json.status === "success") {
@@ -75,13 +73,20 @@ const Home: React.FC = () => {
             readOnly
           />
         </div>
-
-        {/* 공부 장소 추천 */}
+        {/* 공부 장소 추천  */}
         <section className="category-section">
           <h2>공부 장소 추천</h2>
           <div className="category-grid">
             {categories.map((cat) => (
-              <div key={cat.id} className="category-item">
+              <div
+                key={cat.id}
+                className="category-item"
+                onClick={() =>
+                  navigate("/studyspot-rec", {
+                    state: { filterTag: cat.name },
+                  })
+                }
+              >
                 <span className="emoji">{cat.emoji}</span>
                 <span>{cat.name}</span>
               </div>
@@ -89,12 +94,19 @@ const Home: React.FC = () => {
           </div>
         </section>
 
-        {/* 카페 이용 목적 */}
         <section className="purpose-section">
           <h2>카페 이용 목적</h2>
           <div className="purpose-grid">
             {purposes.map((p) => (
-              <div key={p.id} className="purpose-item">
+              <div
+                key={p.id}
+                className="purpose-item"
+                onClick={() =>
+                  navigate("/studyspot-rec", {
+                    state: { filterTag: p.name },
+                  })
+                }
+              >
                 <span className="emoji">{p.emoji}</span>
                 <span>{p.name}</span>
               </div>
