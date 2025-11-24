@@ -13,8 +13,10 @@
   padding-bottom: 100px;
   font-family: "Pretendard", sans-serif;
   box-sizing: border-box;
-  overflow: hidden;
-  height: fit-content;
+  overflow-y: auto; /* 🔥 이렇게 변경 */
+  min-height: 100vh; /* 🔥 화면 높이 최소 보장 */
+
+
 }
 .ai-input {
   border: 1px solid #e4afaf;

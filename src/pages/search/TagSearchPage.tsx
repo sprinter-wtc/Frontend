@@ -5,10 +5,8 @@ import BottomNav from "../../components/BottomNav";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import CafeCard from "../../components/card/CafeCard";
-import {
-  normalizeCafe,
-  CafeCardData,
-} from "../../components/utils/normalizeCafe";
+import { normalizeCafe, CafeCardData } from "../../components/utils/normalizeCafe";
+import { API_BASE_URL } from "../../config/api";
 
 const TAG_MAP: { [key: string]: string[] } = {
   "☕️ 공간종류": ["카페", "스터디카페", "독서실"],
@@ -20,6 +18,36 @@ const TAG_MAP: { [key: string]: string[] } = {
   "🚥 교통접근성": ["지하철 근처", "버스정류장 근처", "접근성 좋음"],
   "🌳 주변환경": ["번화가", "조용한 골목", "공원 근처", "캠퍼스 근처"],
   "🐶 애견동반": ["애견동반 가능", "애견동반 불가능"],
+};
+
+// 태그 → 백엔드 쿼리 키 매핑
+const TAG_TO_QUERY_KEY: { [tag: string]: string } = {
+  "카페": "category",
+  "스터디카페": "category",
+  "독서실": "category",
+  "어두움": "lightning_level",
+  "중간": "lightning_level",
+  "밝음": "lightning_level",
+  "조용함": "noise_level",
+  "적당한 소음": "noise_level",
+  "시끌벅적": "noise_level",
+  "콘센트 없음": "power_outlet_level",
+  "콘센트 있음": "power_outlet_level",
+  "콘센트 많음": "power_outlet_level",
+  "시간제한 있음": "stay_duration_policy",
+  "시간제한 없음": "stay_duration_policy",
+  "주차 가능": "parking_level",
+  "유료 주차": "parking_level",
+  "주차 불가": "parking_level",
+  "지하철 근처": "transport_level",
+  "버스정류장 근처": "transport_level",
+  "접근성 좋음": "transport_level",
+  "번화가": "surrounding_environment",
+  "조용한 골목": "surrounding_environment",
+  "공원 근처": "surrounding_environment",
+  "캠퍼스 근처": "surrounding_environment",
+  "애견동반 가능": "pet_friendly",
+  "애견동반 불가능": "pet_friendly",
 };
 
 interface Cafe {
@@ -49,7 +77,7 @@ const TagSearchPage: React.FC = () => {
   const [results, setResults] = useState<CafeCardData[]>([]);
   const [showAddTags, setShowAddTags] = useState(false);
 
-  const tagsMap = TAG_MAP; // API 없이 TAG_MAP만 사용
+  const tagsMap = TAG_MAP;
   const SPACE_TAGS = new Set(tagsMap["☕️ 공간종류"]);
 
   const toggleTag = (tag: string) => {
@@ -85,17 +113,22 @@ const TagSearchPage: React.FC = () => {
       }
 
       const params = new URLSearchParams();
+
       if (storeQuery) params.append("nameOfCafe", storeQuery);
-      if (selectedTags.length)
-        selectedTags.forEach((tag) => params.append("tags", tag));
 
-      console.log("[DEBUG] 검색 파라미터:", params.toString());
+      // 선택된 태그를 백엔드 key=value 형식으로 변환
+      selectedTags.forEach((tag) => {
+        const key = TAG_TO_QUERY_KEY[tag];
+        if (key) params.append(key, tag);
+      });
 
-      const res = await axios.get<{ data: { cafes: Cafe[] } }>(
-        `https://studyspot.kr/api/cafes?${params.toString()}`
-      );
+      const requestUrl = `${API_BASE_URL}/cafes?${params.toString()}`;
+      console.log("[DEBUG] 요청 URL:", requestUrl);
+      console.log("[DEBUG] 선택된 태그:", selectedTags);
 
-      console.log("[DEBUG] API 응답 데이터:", res.data);
+      const res = await axios.get<{ data: { cafes: Cafe[] } }>(requestUrl);
+
+      console.log("[DEBUG] 백엔드 응답:", res.data);
 
       const cafes = Array.isArray(res.data.data?.cafes)
         ? res.data.data.cafes
@@ -103,21 +136,7 @@ const TagSearchPage: React.FC = () => {
 
       const normalized = cafes.map(normalizeCafe);
 
-      console.log("[DEBUG] 정규화된 결과:", normalized);
-
-      const filtered = selectedTags.length
-        ? normalized.filter((cafe) =>
-            selectedTags.every((tag) => {
-              if (SPACE_TAGS.has(tag)) return cafe.category === tag;
-              // cafe.tags가 객체일 경우 Object.values 사용
-              return Object.values(cafe.tags || {}).includes(tag);
-            })
-          )
-        : normalized;
-
-      console.log("[DEBUG] 필터링된 결과:", filtered);
-
-      setResults(filtered);
+      setResults(normalized);
       setShowResult(true);
     } catch (err) {
       console.error("[ERROR] 카페 검색 실패:", err);
@@ -246,8 +265,7 @@ const TagSearchPage: React.FC = () => {
 
           <div className="selected-tags">
             <div>
-              <span className="material-symbols-outlined">tag</span>태그를
-              선택해 주세요.
+              <span className="material-symbols-outlined">tag</span>태그를 선택해 주세요.
             </div>
             <div>
               {selectedTags.map((tag) => (
