@@ -33,12 +33,12 @@ export interface CafeDetail extends CafeBase {
   limitTime: number;          // 시간 제한
   phoneNumber: string;        // 전화번호
   tags: {
-    petFriendly: boolean;     // 반려견 동반 가능 여부
+    petFriendly: boolean; // 반려견 동반 가능 여부
     power_outlet_level: string; // 콘센트 수준
   };
-  menuList: Menu[];           // 메뉴 리스트
-  imageList: ImageData[];     // 이미지 리스트
-  location: number[];         // [lng, lat]
+  menuList: Menu[]; // 메뉴 리스트
+  imageList: ImageData[]; // 이미지 리스트
+  location: number[]; // [lng, lat]
 }
 
 // 리뷰 타입
@@ -51,10 +51,18 @@ interface Review {
 
 interface CafeReviews {
   averageStarRating?: number; // 평균 별점
-  reviewCount?: number;       // 리뷰 개수
+  reviewCount?: number; // 리뷰 개수
   reviews?: Review[];
 }
+// ----------------------
+// 이미지 url 처리 함수
+// ----------------------
 
+const BASE_IMAGE_URL = "https://tmp.studyspot.kr";
+const getFullImageUrl = (url: string) => {
+  if (!url) return "";
+  return url.startsWith("http") ? url : `${BASE_IMAGE_URL}${url}`;
+};
 // ----------------------
 // 글로벌 window 타입 선언 필요 (naver 지도)
 // ----------------------
@@ -123,7 +131,10 @@ export default function CafeDetailPage() {
     });
 
     new window.naver.maps.Marker({
-      position: new window.naver.maps.LatLng(cafe.location[1], cafe.location[0]),
+      position: new window.naver.maps.LatLng(
+        cafe.location[1],
+        cafe.location[0]
+      ),
       map,
     });
   }, [cafe]);
@@ -140,7 +151,7 @@ export default function CafeDetailPage() {
       {/* 이미지 슬라이더 */}
       <div className="slider">
         <img
-          src={cafe.imageList[currentImage]?.imageUrl}
+          src={getFullImageUrl(cafe.imageList[currentImage]?.imageUrl)}
           alt="카페 이미지"
           className="slider-img"
         />
@@ -193,7 +204,11 @@ export default function CafeDetailPage() {
       <div className="menu-grid">
         {cafe.menuList.map((m: Menu, i: number) => (
           <div key={i} className="menu-card">
-            <img src={m.imageUrl} alt={m.name} className="menu-img" />
+            <img
+              src={getFullImageUrl(m.imageUrl)}
+              alt={m.name}
+              className="menu-img"
+            />
             <h3 className="menu-title">{m.name}</h3>
             <p className="menu-desc">{m.description}</p>
             <p className="menu-price">{m.price}원</p>
@@ -220,7 +235,9 @@ export default function CafeDetailPage() {
             <div key={i} className="review-card">
               <b>{r.name}</b> ⭐ {r.starRating}
               <p>{r.content}</p>
-              {r.imageUrl && <img src={r.imageUrl} alt="리뷰 이미지" />}
+              {r.imageUrl && (
+                <img src={getFullImageUrl(r.imageUrl)} alt="리뷰 이미지" />
+              )}
             </div>
           ))}
         </div>
@@ -230,8 +247,7 @@ export default function CafeDetailPage() {
       <h2 className="section-title">위치</h2>
       <div ref={mapRef} className="naver-map"></div>
 
-       <BottomNav />
+      <BottomNav />
     </div>
-
   );
 }
