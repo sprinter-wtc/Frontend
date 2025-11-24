@@ -7,7 +7,10 @@ import { useNavigate } from "react-router-dom";
 import { getAiTags } from "../../api/cafeApi"; // AI 태그 가져오기
 import CafeCard from "../../components/card/CafeCard";
 
-import { normalizeCafe, CafeCardData } from "../../components/utils/normalizeCafe";
+import {
+  normalizeCafe,
+  CafeCardData,
+} from "../../components/utils/normalizeCafe";
 import { API_BASE_URL } from "../../config/api";
 
 const RECOMMENDED_SENTENCES = [
@@ -44,15 +47,15 @@ const RECOMMENDED_SENTENCES = [
 ];
 
 const TAG_TO_QUERY_KEY: { [tag: string]: string } = {
-  "카페": "category",
-  "스터디카페": "category",
-  "독서실": "category",
-  "어두움": "lightning_level",
-  "중간": "lightning_level",
-  "밝음": "lightning_level",
-  "조용함": "noise_level",
+  카페: "category",
+  스터디카페: "category",
+  독서실: "category",
+  어두움: "lightning_level",
+  중간: "lightning_level",
+  밝음: "lightning_level",
+  조용함: "noise_level",
   "적당한 소음": "noise_level",
-  "시끌벅적": "noise_level",
+  시끌벅적: "noise_level",
   "콘센트 없음": "power_outlet_level",
   "콘센트 있음": "power_outlet_level",
   "콘센트 많음": "power_outlet_level",
@@ -64,7 +67,7 @@ const TAG_TO_QUERY_KEY: { [tag: string]: string } = {
   "지하철 근처": "transport_level",
   "버스정류장 근처": "transport_level",
   "접근성 좋음": "transport_level",
-  "번화가": "surrounding_environment",
+  번화가: "surrounding_environment",
   "조용한 골목": "surrounding_environment",
   "공원 근처": "surrounding_environment",
   "캠퍼스 근처": "surrounding_environment",
@@ -87,6 +90,7 @@ const AiSearchPage: React.FC = () => {
     JSON.parse(localStorage.getItem("recentQueries") || "[]")
   );
   const [randomSentences, setRandomSentences] = useState<string[]>([]);
+  const [hasSearched, setHasSearched] = useState(false); // 검색 수행 여부
 
   // 추천 문장 랜덤 3개
   useEffect(() => {
@@ -96,7 +100,10 @@ const AiSearchPage: React.FC = () => {
 
   // 입력 디바운스
   useEffect(() => {
-    const handler = setTimeout(() => setDebouncedQuery(aiQuery), DEBOUNCE_DELAY);
+    const handler = setTimeout(
+      () => setDebouncedQuery(aiQuery),
+      DEBOUNCE_DELAY
+    );
     return () => clearTimeout(handler);
   }, [aiQuery]);
 
@@ -119,55 +126,54 @@ const AiSearchPage: React.FC = () => {
   }, [debouncedQuery]);
 
   // 검색 실행
-const executeSearch = async () => {
-  if (!aiQuery.trim()) return;
-  
-  setIsLoading(true);
-  try {
-    // 최신 AI 태그 가져오기
-    const tags = await getAiTags(aiQuery); 
-    setAiGeneratedTags(tags);
 
-    const params = new URLSearchParams();
-    const queryMap: { [key: string]: string[] } = {};
+  const executeSearch = async () => {
+    if (!aiQuery.trim()) return;
 
-    tags.forEach((tag) => {
-      const key = TAG_TO_QUERY_KEY[tag];
-      if (!key) return;
-      if (!queryMap[key]) queryMap[key] = [];
-      queryMap[key].push(tag);
-    });
+    setIsLoading(true);
+    setHasSearched(true); // 검색 시작
 
-    Object.entries(queryMap).forEach(([key, values]) => {
-      values.forEach((v) => params.append(key, v));
-    });
+    try {
+      const tags = await getAiTags(aiQuery);
+      setAiGeneratedTags(tags);
 
-    // 태그에 매핑이 없는 입력어만 nameOfCafe로
-    const unmapped = tags.filter((tag) => !TAG_TO_QUERY_KEY[tag]);
-    if (unmapped.length === 0) {
-      // 모든 태그가 매핑됨 → nameOfCafe 사용 안함
-    } else {
-      params.append("nameOfCafe", aiQuery);
+      const params = new URLSearchParams();
+
+      if (tags.length > 0) {
+        // 태그 기반 검색
+        const queryMap: { [key: string]: string[] } = {};
+        tags.forEach((tag) => {
+          const key = TAG_TO_QUERY_KEY[tag];
+          if (!key) return;
+          if (!queryMap[key]) queryMap[key] = [];
+          queryMap[key].push(tag);
+        });
+        Object.entries(queryMap).forEach(([key, values]) => {
+          values.forEach((v) => params.append(key, v));
+        });
+      } else {
+        // 태그 없으면 이름 검색
+        params.append("nameOfCafe", aiQuery);
+      }
+
+      const res = await axios.get(`${MOCK_SERVER}/cafes`, { params });
+      const cafes = Array.isArray(res.data.data?.cafes)
+        ? res.data.data.cafes
+        : [];
+      setSearchResults(cafes.map(normalizeCafe));
+
+      if (!recentQueries.includes(aiQuery)) {
+        const newRecent = [aiQuery, ...recentQueries].slice(0, 10);
+        setRecentQueries(newRecent);
+        localStorage.setItem("recentQueries", JSON.stringify(newRecent));
+      }
+    } catch (err) {
+      console.error(err);
+      setSearchResults([]);
+    } finally {
+      setIsLoading(false);
     }
-
-    const res = await axios.get(`${MOCK_SERVER}/cafes`, { params });
-    const cafes = Array.isArray(res.data.data?.cafes) ? res.data.data.cafes : [];
-    setSearchResults(cafes.map(normalizeCafe));
-
-    // 최근 검색어
-    if (!recentQueries.includes(aiQuery)) {
-      const newRecent = [aiQuery, ...recentQueries].slice(0, 10);
-      setRecentQueries(newRecent);
-      localStorage.setItem("recentQueries", JSON.stringify(newRecent));
-    }
-  } catch (err) {
-    console.error(err);
-    setSearchResults([]);
-  } finally {
-    setIsLoading(false);
-  }
-};
-
+  };
 
   const handleKeyPress = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -184,10 +190,16 @@ const executeSearch = async () => {
   return (
     <div className="search-container">
       <div className="search-tabs">
-        <button className={activeTab === "AI" ? "active" : ""} onClick={() => switchTab("AI")}>
+        <button
+          className={activeTab === "AI" ? "active" : ""}
+          onClick={() => switchTab("AI")}
+        >
           문자 추출형
         </button>
-        <button className={activeTab === "CHOICE" ? "active" : ""} onClick={() => switchTab("CHOICE")}>
+        <button
+          className={activeTab === "CHOICE" ? "active" : ""}
+          onClick={() => switchTab("CHOICE")}
+        >
           선택형
         </button>
       </div>
@@ -201,13 +213,21 @@ const executeSearch = async () => {
           rows={4}
           className="ai-input"
         />
-        <button type="button" className="ai-search-button" onClick={executeSearch}>
+        <button
+          type="button"
+          className="ai-search-button"
+          onClick={executeSearch}
+        >
           🔍
         </button>
       </div>
 
       <div className="recommend-sentences">
-        {aiGeneratedTags.length > 0 ? aiGeneratedTags.map((tag) => <span key={tag}>{tag}</span>) : <p className="tag-placeholder">&nbsp;</p>}
+        {aiGeneratedTags.length > 0 ? (
+          aiGeneratedTags.map((tag) => <span key={tag}>{tag}</span>)
+        ) : (
+          <p className="tag-placeholder">&nbsp;</p>
+        )}
       </div>
 
       {aiQuery.trim() === "" && (
@@ -216,7 +236,11 @@ const executeSearch = async () => {
             <p className="suggest-section-recommend-title">추천 문장</p>
             <div className="suggest-section-recommend-list">
               {randomSentences.map((s, i) => (
-                <button key={i} className="suggest-section-recommend-item" onClick={() => setAiQuery(s)}>
+                <button
+                  key={i}
+                  className="suggest-section-recommend-item"
+                  onClick={() => setAiQuery(s)}
+                >
                   {s}
                 </button>
               ))}
@@ -226,19 +250,27 @@ const executeSearch = async () => {
             <div className="suggest-section-last">
               <p className="suggest-section-last-title">이전에 작성한 문장</p>
               <div className="suggest-section-last-list">
-                {recentQueries.slice(0,5).map((q, i) => (
+                {recentQueries.slice(0, 5).map((q, i) => (
                   <div key={i} className="suggest-section-last-item-wrapper">
                     <button
                       className="suggest-section-last-item-delete"
                       onClick={() => {
-                        const newList = recentQueries.filter((item) => item !== q);
+                        const newList = recentQueries.filter(
+                          (item) => item !== q
+                        );
                         setRecentQueries(newList);
-                        localStorage.setItem("recentQueries", JSON.stringify(newList));
+                        localStorage.setItem(
+                          "recentQueries",
+                          JSON.stringify(newList)
+                        );
                       }}
                     >
                       ✕ &nbsp;
                     </button>
-                    <p className="suggest-section-last-item" onClick={() => setAiQuery(q)}>
+                    <p
+                      className="suggest-section-last-item"
+                      onClick={() => setAiQuery(q)}
+                    >
                       {q}
                     </p>
                   </div>
@@ -249,19 +281,16 @@ const executeSearch = async () => {
         </div>
       )}
 
-      {/* 검색 결과 영역 */}
       <div className="results">
         {isLoading && <p>⏳ 검색 중...</p>}
 
-        {!isLoading && searchResults.length === 0 && (
+        {!isLoading && hasSearched && searchResults.length === 0 && (
           <p>🔍 검색 결과가 없습니다.</p>
         )}
 
         {!isLoading &&
           searchResults.length > 0 &&
-          searchResults.map((cafe) => (
-            <CafeCard key={cafe.id} cafe={cafe} />
-          ))}
+          searchResults.map((cafe) => <CafeCard key={cafe.id} cafe={cafe} />)}
       </div>
 
       <BottomNav />
