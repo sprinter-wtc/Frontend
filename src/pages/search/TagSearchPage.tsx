@@ -4,7 +4,6 @@ import React, { useState, useEffect, KeyboardEvent } from "react";
 import BottomNav from "../../components/BottomNav";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { getTags } from "../../api/cafeApi";
 import CafeCard from "../../components/cafe/CafeCard";
 import {
   normalizeCafe,
@@ -49,36 +48,9 @@ const TagSearchPage: React.FC = () => {
   const [showResult, setShowResult] = useState(false);
   const [results, setResults] = useState<CafeCardData[]>([]);
   const [showAddTags, setShowAddTags] = useState(false);
-  const normalizedResults: CafeCardData[] = results.map(normalizeCafe);
 
-  const [tagsMap, setTagsMap] = useState<{ [key: string]: string[] }>(TAG_MAP);
-
-  // ---------------------
-  // 태그 API 호출
-  // ---------------------
-  useEffect(() => {
-    const fetchTags = async () => {
-      try {
-        const categories = Object.keys(TAG_MAP);
-        const newTagsMap: { [key: string]: string[] } = {};
-
-        for (const category of categories) {
-          const tagsFromApi = await getTags(category); // searchPhrase 기반
-          newTagsMap[category] = tagsFromApi.length
-            ? tagsFromApi
-            : TAG_MAP[category];
-        }
-
-        setTagsMap(newTagsMap);
-      } catch (err) {
-        console.error("[ERROR] 태그 불러오기 실패:", err);
-        setTagsMap(TAG_MAP);
-      }
-    };
-    fetchTags();
-  }, []);
-
-  const SPACE_TAGS = new Set(tagsMap["☕️ 공간종류"] || []);
+  const tagsMap = TAG_MAP; // API 없이 TAG_MAP만 사용
+  const SPACE_TAGS = new Set(tagsMap["☕️ 공간종류"]);
 
   const toggleTag = (tag: string) => {
     setSelectedTags((prev) =>
@@ -105,28 +77,52 @@ const TagSearchPage: React.FC = () => {
   // ---------------------
   const executeSearch = async () => {
     try {
+      if (!storeQuery && selectedTags.length === 0) {
+        console.log("[INFO] 검색 조건 없음");
+        setResults([]);
+        setShowResult(false);
+        return;
+      }
+
       const params = new URLSearchParams();
       if (storeQuery) params.append("nameOfCafe", storeQuery);
       if (selectedTags.length)
         selectedTags.forEach((tag) => params.append("tags", tag));
 
+      console.log("[DEBUG] 검색 파라미터:", params.toString());
+
       const res = await axios.get<{ data: { cafes: Cafe[] } }>(
         `https://studyspot.kr/api/cafes?${params.toString()}`
       );
+
+      console.log("[DEBUG] API 응답 데이터:", res.data);
 
       const cafes = Array.isArray(res.data.data?.cafes)
         ? res.data.data.cafes
         : [];
 
-      // ★ normalizeCafe 적용 ★
       const normalized = cafes.map(normalizeCafe);
 
-      setResults(normalized);
+      console.log("[DEBUG] 정규화된 결과:", normalized);
+
+      const filtered = selectedTags.length
+        ? normalized.filter((cafe) =>
+            selectedTags.every((tag) => {
+              if (SPACE_TAGS.has(tag)) return cafe.category === tag;
+              // cafe.tags가 객체일 경우 Object.values 사용
+              return Object.values(cafe.tags || {}).includes(tag);
+            })
+          )
+        : normalized;
+
+      console.log("[DEBUG] 필터링된 결과:", filtered);
+
+      setResults(filtered);
       setShowResult(true);
     } catch (err) {
       console.error("[ERROR] 카페 검색 실패:", err);
       setResults([]);
-      setShowResult(true);
+      setShowResult(false);
     }
   };
 
@@ -138,18 +134,12 @@ const TagSearchPage: React.FC = () => {
     if (showResult) executeSearch();
   }, [selectedTags]);
 
-  // ---------------------
-  // 영업중 계산 함수
-  // ---------------------
   const checkOpenStatus = (start?: string, end?: string) => {
     if (!start || !end) return "정보없음";
-
     const now = new Date();
     const current = now.getHours() * 60 + now.getMinutes();
-
     const [sh, sm] = start.split(":").map(Number);
     const [eh, em] = end.split(":").map(Number);
-
     const startMin = sh * 60 + sm;
     const endMin = eh * 60 + em;
 

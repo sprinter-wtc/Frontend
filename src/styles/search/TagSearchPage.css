@@ -15,10 +15,9 @@
   box-sizing: border-box;
   overflow: hidden;
   height: fit-content;
-  
 }
 .ai-input {
-  border: 1px solid #e4afaf;
+  /* border: 1px solid #e4afaf; */
   border-radius: 12px;
 }
 /* 상단 탭 */
@@ -44,7 +43,6 @@
 .search-tabs button.active {
   border-bottom: 3px solid #e4afaf;
   color: #e4afaf;
-
 }
 
 /* 선택된 태그 영역 */
@@ -101,10 +99,12 @@
 /* 선택된 태그 색상 */
 .tag.space-type.active {
   background-color: #c6eac3;
+  border: none;
 }
 
 .tag.active:not(.space-type) {
   background-color: #e58c8c;
+  border: none;
   color: #fff;
 }
 
@@ -194,8 +194,6 @@ button.ai-input {
 
 button.ai-input:hover {
   background-color: #e4afaf;
-
-
 }
 
 /* 검색 결과 카드 */
