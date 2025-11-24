@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/Home.css";
 import BottomNav from "../components/BottomNav";
-import CafeCard, { CafeCardData } from "../components/cafe/CafeCard";
+import CafeCard, { CafeCardData } from "../components/card/CafeCard";
 import { normalizeCafe } from "../components/utils/normalizeCafe";
+import { API_BASE_URL } from "../config/api";
 
 interface Category {
   id: number;
