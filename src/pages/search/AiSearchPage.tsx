@@ -6,28 +6,9 @@ import BottomNav from "../../components/BottomNav";
 import { useNavigate } from "react-router-dom";
 import { getAiTags } from "../../api/cafeApi"; // AI 태그 가져오기
 import CafeCard from "../../components/card/CafeCard";
-import {
-  normalizeCafe,
-  CafeCardData,
-} from "../../components/utils/normalizeCafe";
+
+import { normalizeCafe, CafeCardData } from "../../components/utils/normalizeCafe";
 import { API_BASE_URL } from "../../config/api";
-
-
-interface Cafe {
-  id: number;
-  name: string;
-  category: string;
-  purpose: string[];
-  tags: { [key: string]: any };
-  imageList: { imageUrl: string; index: number }[];
-  location: number[];
-  rating?: number;
-  startingTime?: string;
-  closingTime?: string;
-  averageStarRating?: number;
-  address?: string;
-  imageUrl?: string;
-}
 
 const RECOMMENDED_SENTENCES = [
   "✨ 조용하고 밝은 카페 추천해줘",
@@ -62,16 +43,33 @@ const RECOMMENDED_SENTENCES = [
   "🚶‍♂️ 산책 후 들르기 좋은 카페 알려줘",
 ];
 
-const TAG_MAP: { [key: string]: string[] } = {
-  "☕️ 공간종류": ["카페", "스터디카페", "독서실"],
-  "💡 조명 밝기": ["어두움", "중간", "밝음"],
-  "👂 소음정도": ["조용함", "적당한 소음", "시끌벅적"],
-  "🔌 콘센트": ["콘센트 없음", "콘센트 있음", "콘센트 많음"],
-  "⌛️ 시간제한": ["시간제한 있음", "시간제한 없음"],
-  "🚗 주차": ["주차 가능", "유료 주차", "주차 불가"],
-  "🚥 교통접근성": ["지하철 근처", "버스정류장 근처", "접근성 좋음"],
-  "🌳 주변환경": ["번화가", "조용한 골목", "공원 근처", "캠퍼스 근처"],
-  "🐶 애견동반": ["애견동반 가능", "애견동반 불가능"],
+const TAG_TO_QUERY_KEY: { [tag: string]: string } = {
+  "카페": "category",
+  "스터디카페": "category",
+  "독서실": "category",
+  "어두움": "lightning_level",
+  "중간": "lightning_level",
+  "밝음": "lightning_level",
+  "조용함": "noise_level",
+  "적당한 소음": "noise_level",
+  "시끌벅적": "noise_level",
+  "콘센트 없음": "power_outlet_level",
+  "콘센트 있음": "power_outlet_level",
+  "콘센트 많음": "power_outlet_level",
+  "시간제한 있음": "stay_duration_policy",
+  "시간제한 없음": "stay_duration_policy",
+  "주차 가능": "parking_level",
+  "유료 주차": "parking_level",
+  "주차 불가": "parking_level",
+  "지하철 근처": "transport_level",
+  "버스정류장 근처": "transport_level",
+  "접근성 좋음": "transport_level",
+  "번화가": "surrounding_environment",
+  "조용한 골목": "surrounding_environment",
+  "공원 근처": "surrounding_environment",
+  "캠퍼스 근처": "surrounding_environment",
+  "애견동반 가능": "pet_friendly",
+  "애견동반 불가능": "pet_friendly",
 };
 
 const MOCK_SERVER = "https://studyspot.kr/api";
@@ -121,43 +119,55 @@ const AiSearchPage: React.FC = () => {
   }, [debouncedQuery]);
 
   // 검색 실행
-  const executeSearch = async () => {
-    if (!aiQuery.trim() && aiGeneratedTags.length === 0) return;
+const executeSearch = async () => {
+  if (!aiQuery.trim()) return;
+  
+  setIsLoading(true);
+  try {
+    // 최신 AI 태그 가져오기
+    const tags = await getAiTags(aiQuery); 
+    setAiGeneratedTags(tags);
 
-    setIsLoading(true);
-    try {
-      const params = new URLSearchParams();
-      if (aiQuery.trim()) params.append("nameOfCafe", aiQuery);
+    const params = new URLSearchParams();
+    const queryMap: { [key: string]: string[] } = {};
 
-      // AI 태그를 서버 파라미터로 전달
-      aiGeneratedTags.forEach((tag) => {
-        // 공간 종류는 category로, 나머지는 tags로
-        if (TAG_MAP["☕️ 공간종류"].includes(tag)) params.append("category", tag);
-        else params.append("tags", tag);
-      });
+    tags.forEach((tag) => {
+      const key = TAG_TO_QUERY_KEY[tag];
+      if (!key) return;
+      if (!queryMap[key]) queryMap[key] = [];
+      queryMap[key].push(tag);
+    });
 
-      const res = await axios.get<{ data: { cafes: Cafe[] } }>(
-        `${MOCK_SERVER}/cafes?${params.toString()}`
-      );
+    Object.entries(queryMap).forEach(([key, values]) => {
+      values.forEach((v) => params.append(key, v));
+    });
 
-      const cafes = Array.isArray(res.data.data?.cafes) ? res.data.data.cafes : [];
-      const normalized = cafes.map(normalizeCafe);
-
-      setSearchResults(normalized);
-
-      // 최근 검색어 저장
-      if (aiQuery.trim() && !recentQueries.includes(aiQuery)) {
-        const newRecent = [aiQuery, ...recentQueries].slice(0, 10);
-        setRecentQueries(newRecent);
-        localStorage.setItem("recentQueries", JSON.stringify(newRecent));
-      }
-    } catch (err) {
-      console.error("[ERROR] 카페 검색 실패:", err);
-      setSearchResults([]);
-    } finally {
-      setIsLoading(false);
+    // 태그에 매핑이 없는 입력어만 nameOfCafe로
+    const unmapped = tags.filter((tag) => !TAG_TO_QUERY_KEY[tag]);
+    if (unmapped.length === 0) {
+      // 모든 태그가 매핑됨 → nameOfCafe 사용 안함
+    } else {
+      params.append("nameOfCafe", aiQuery);
     }
-  };
+
+    const res = await axios.get(`${MOCK_SERVER}/cafes`, { params });
+    const cafes = Array.isArray(res.data.data?.cafes) ? res.data.data.cafes : [];
+    setSearchResults(cafes.map(normalizeCafe));
+
+    // 최근 검색어
+    if (!recentQueries.includes(aiQuery)) {
+      const newRecent = [aiQuery, ...recentQueries].slice(0, 10);
+      setRecentQueries(newRecent);
+      localStorage.setItem("recentQueries", JSON.stringify(newRecent));
+    }
+  } catch (err) {
+    console.error(err);
+    setSearchResults([]);
+  } finally {
+    setIsLoading(false);
+  }
+};
+
 
   const handleKeyPress = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -239,14 +249,19 @@ const AiSearchPage: React.FC = () => {
         </div>
       )}
 
-      <div className="results scroll-area">
-        {isLoading ? (
-          <p>로딩 중...</p>
-        ) : searchResults.length > 0 ? (
-          searchResults.map((cafe) => <CafeCard key={cafe.id} cafe={cafe} />)
-        ) : (
-          aiQuery.trim() !== "" && <p>검색 결과가 없습니다.</p>
+      {/* 검색 결과 영역 */}
+      <div className="results">
+        {isLoading && <p>⏳ 검색 중...</p>}
+
+        {!isLoading && searchResults.length === 0 && (
+          <p>🔍 검색 결과가 없습니다.</p>
         )}
+
+        {!isLoading &&
+          searchResults.length > 0 &&
+          searchResults.map((cafe) => (
+            <CafeCard key={cafe.id} cafe={cafe} />
+          ))}
       </div>
 
       <BottomNav />
