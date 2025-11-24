@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./CafeCard.css";
 
@@ -14,7 +14,8 @@ export interface CafeCardData {
   closingTime?: string;
   tags?: string[];
 }
-const IMAGE_BASE_URL = "https://studyspot.kr";
+
+const IMAGE_BASE_URL = "https://tmp.studyspot.kr";
 
 interface CafeCardProps {
   cafe: CafeCardData;
@@ -23,6 +24,13 @@ interface CafeCardProps {
 const CafeCard: React.FC<CafeCardProps> = ({ cafe }) => {
   const navigate = useNavigate();
   const fallbackImage = "/images/default_cafe.png";
+
+  // 이미지 src 상태
+  const [imgSrc, setImgSrc] = useState(
+    cafe.imageList?.[0]?.imageUrl
+      ? `${IMAGE_BASE_URL}${cafe.imageList[0].imageUrl}`
+      : fallbackImage
+  );
 
   // 영업 상태 계산
   const checkOpenStatus = (start?: string, end?: string) => {
@@ -54,20 +62,14 @@ const CafeCard: React.FC<CafeCardProps> = ({ cafe }) => {
     >
       <div className="cafe-card-div">
         <div className="cafe-card-img">
-          {/* <img
-            src={
-              cafe.imageList?.[0]?.imageUrl
-                ? `${IMAGE_BASE_URL}${cafe.imageList[0].imageUrl}`
-                : fallbackImage
-            }
+          <img
+            src={imgSrc}
             alt={cafe.name}
             className="cafe-thumbnail"
-            onError={(e) => {
-              if (e.currentTarget.src !== fallbackImage) {
-                e.currentTarget.src = fallbackImage;
-              }
+            onError={() => {
+              if (imgSrc !== fallbackImage) setImgSrc(fallbackImage);
             }}
-          /> */}
+          />
         </div>
 
         <div className="cafe-info">
