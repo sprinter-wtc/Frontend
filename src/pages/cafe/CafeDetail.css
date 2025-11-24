@@ -149,6 +149,13 @@
 }
 
 /* 평가 & 리뷰 */
+.best-review-header {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 20px 0 8px;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 4px;
+}
 .reviews-section {
   margin-top: 2rem;
 }
@@ -159,7 +166,11 @@
   gap: 0.5rem;
   margin-bottom: 1rem;
 }
-
+.see-all-reviews{
+  font-size: 15px;
+}
+.see-all-reviews:hover{
+cursor: pointer;}
 .avg-rating {
   font-size: 2rem;
   font-weight: bold;
@@ -168,7 +179,7 @@
 .best-review-block {
   margin-top: 20px;
   padding: 16px;
-  background-color: #f9f9f9;
+  background-color: white;
   border-radius: 12px;
 }
 
@@ -206,8 +217,8 @@
 
 /* 베스트 리뷰 카드 */
 .review-card.best {
-  border: 1px solid #ffd700; /* 베스트 리뷰 강조 */
-  background-color: #fffbea;
+  border: 1px solid #ddd; /* 베스트 리뷰 강조 */
+  background-color: white;
   border-radius: 12px;
   padding: 12px;
   display: flex;
@@ -220,7 +231,7 @@
   width: 80px;
   height: 80px;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 100px;
   flex-shrink: 0; /* 이미지 고정 크기 */
 }
 /* 리뷰 내용 (텍스트) */
