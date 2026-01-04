@@ -44,7 +44,7 @@
 | **Routing** | React Router DOM |
 | **State Management** | Context API |
 | **Map API** | Naver Maps JavaScript API |
-| **Build / Deploy** | Docker, Nginx, GitHub Actions, AWS EC2 |
+| **Build / Deploy** | Docker, Nginx, GitHub Actions, Own linux server |
 | **Collaboration** | GitHub, Notion, Discord |
 
 ---
@@ -141,7 +141,7 @@ docker run -p 3000:80 studyspot-frontend
 
 1. GitHub Actions → Docker Build
 2. Docker Hub 푸시
-3. AWS EC2 pull → Nginx로 서빙
+3. SSH를 통해 자체 서버로 Deploy → Nginx로 서빙
 4. main/test 브랜치에 따라 자동 분기 처리
    - `main` → 운영(frontend)
    - `test` → 테스트(frontend-test)
